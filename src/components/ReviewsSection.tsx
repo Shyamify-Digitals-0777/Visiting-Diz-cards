@@ -71,44 +71,92 @@ const ReviewsSection: React.FC<ReviewsSectionProps> = ({ animationConfig }) => {
     fetchReviews();
   }, []);
 
+  // Load reviews from localStorage and merge with mock data
   const fetchReviews = async () => {
     try {
-      // In production, uncomment this and remove mock data:
-      // const response = await axios.get('/api/reviews');
-      // setReviews(response.data);
+      // Get stored reviews from localStorage
+      const storedReviews = localStorage.getItem('harvinder-telecom-reviews');
+      let userReviews: Review[] = [];
       
-      // For now, using mock data:
-      setReviews(mockReviews);
+      if (storedReviews) {
+        try {
+          userReviews = JSON.parse(storedReviews);
+        } catch (error) {
+          console.error('Error parsing stored reviews:', error);
+          userReviews = [];
+        }
+      }
+      
+      // Merge user reviews with mock reviews (user reviews first)
+      const allReviews = [...userReviews, ...mockReviews];
+      setReviews(allReviews);
+      
+      // In production, you would also fetch from API:
+      // const response = await axios.get('/api/reviews');
+      // const apiReviews = response.data;
+      // setReviews([...userReviews, ...apiReviews]);
+      
     } catch (error) {
       console.error('Error fetching reviews:', error);
-      setReviews(mockReviews); // Fallback to mock data
+      // Fallback to mock data only
+      setReviews(mockReviews);
     }
   };
 
+  // Save review to localStorage
+  const saveReviewToStorage = (review: Review) => {
+    try {
+      const storedReviews = localStorage.getItem('harvinder-telecom-reviews');
+      let userReviews: Review[] = [];
+      
+      if (storedReviews) {
+        userReviews = JSON.parse(storedReviews);
+      }
+      
+      // Add new review to the beginning of the array
+      userReviews.unshift(review);
+      
+      // Keep only the last 50 user reviews to prevent localStorage bloat
+      if (userReviews.length > 50) {
+        userReviews = userReviews.slice(0, 50);
+      }
+      
+      localStorage.setItem('harvinder-telecom-reviews', JSON.stringify(userReviews));
+    } catch (error) {
+      console.error('Error saving review to localStorage:', error);
+    }
+  };
   const handleSubmitReview = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
 
     try {
-      // In production, uncomment this API call:
-      // const response = await axios.post('/api/reviews', {
-      //   ...formData,
-      //   createdAt: new Date().toISOString().split('T')[0]
-      // });
 
-      // For now, simulate API response:
       const newReview: Review = {
         id: Date.now(),
         ...formData,
         createdAt: new Date().toISOString().split('T')[0]
       };
 
+      // Save to localStorage first
+      saveReviewToStorage(newReview);
+      
+      // Update state to show immediately
       setReviews(prev => [newReview, ...prev]);
       setSubmittedReview(newReview);
       setReviewText(`${newReview.title}\n\n${newReview.message}`);
       setFormData({ name: '', rating: 5, title: '', message: '' });
       setShowForm(false);
       setShowConfirmationModal(true);
+      
+      // In production, also save to API:
+      // try {
+      //   const response = await axios.post('/api/reviews', newReview);
+      //   console.log('Review saved to API:', response.data);
+      // } catch (apiError) {
+      //   console.error('Error saving to API:', apiError);
+      //   // Review is still saved locally, so user experience isn't affected
+      // }
       
     } catch (error) {
       console.error('Error submitting review:', error);
@@ -250,11 +298,16 @@ const ReviewsSection: React.FC<ReviewsSectionProps> = ({ animationConfig }) => {
           <div className="flex items-center justify-center gap-4 mb-4">
             <div className="flex">{renderStars(Math.floor(parseFloat(averageRating)))}</div>
             <span className="text-2xl font-bold text-blue-900">{averageRating}</span>
-            <span className="text-gray-600">({reviews.length} reviews)</span>
+            <span className="text-gray-600">({reviews.length} review{reviews.length !== 1 ? 's' : ''})</span>
           </div>
           <p className="text-xl text-gray-600 max-w-2xl mx-auto">
             See what our satisfied customers have to say about their experience with us.
           </p>
+          {reviews.length > 3 && (
+            <p className="text-sm text-blue-600 mt-2">
+              ✨ Including {reviews.filter(r => r.id > 1000).length} recent customer reviews
+            </p>
+          )}
         </motion.div>
 
         {/* Reviews Grid */}
