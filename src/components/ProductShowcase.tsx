@@ -1,6 +1,11 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ShoppingBag, Eye, MessageCircle, Star, Zap, Camera, Battery, Smartphone } from 'lucide-react';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Navigation, Pagination, Autoplay } from 'swiper/modules';
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
 
 interface ProductShowcaseProps {
   animationConfig: any;
@@ -200,95 +205,43 @@ const ProductShowcase: React.FC<ProductShowcaseProps> = ({ animationConfig }) =>
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.5 }}
-            className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
           >
-            {products[selectedCategory as keyof typeof products]?.map((product, index) => (
-              <motion.div
-                key={product.id}
-                initial={{ opacity: 0, y: 50, scale: 0.9 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                transition={{
-                  duration: animationConfig.motionDuration,
-                  delay: index * animationConfig.motionStagger,
-                  ease: animationConfig.motionEasing
+            {/* Desktop Grid */}
+            <div className="hidden md:grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              {products[selectedCategory as keyof typeof products]?.map((product, index) => (
+                <ProductCard key={product.id} product={product} index={index} animationConfig={animationConfig} handleContactForProduct={handleContactForProduct} />
+              ))}
+            </div>
+
+            {/* Mobile Slider */}
+            <div className="md:hidden">
+              <Swiper
+                modules={[Navigation, Pagination, Autoplay]}
+                spaceBetween={20}
+                slidesPerView={1.2}
+                centeredSlides={false}
+                navigation={true}
+                pagination={{ clickable: true }}
+                autoplay={{ delay: 4000, disableOnInteraction: false }}
+                breakpoints={{
+                  480: {
+                    slidesPerView: 1.5,
+                    spaceBetween: 20,
+                  },
+                  640: {
+                    slidesPerView: 2,
+                    spaceBetween: 20,
+                  },
                 }}
-                whileHover={{ y: -10, transition: { duration: 0.3 } }}
-                className="bg-white rounded-3xl shadow-lg overflow-hidden group hover:shadow-2xl transition-all duration-500"
+                className="product-swiper"
               >
-                {/* Product Badge */}
-                <div className="relative">
-                  <div className="absolute top-4 left-4 z-10">
-                    <span className="bg-gradient-to-r from-red-500 to-orange-500 text-white px-3 py-1 rounded-full text-sm font-bold">
-                      {product.badge}
-                    </span>
-                  </div>
-                  
-                  {/* Product Image */}
-                  <div className="relative h-48 overflow-hidden">
-                    <img
-                      src={product.image}
-                      alt={product.name}
-                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                      loading="lazy"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                  </div>
-                </div>
-
-                <div className="p-6">
-                  {/* Product Name & Rating */}
-                  <div className="mb-3">
-                    <h3 className="text-lg font-bold text-blue-900 mb-2 group-hover:text-blue-700 transition-colors">
-                      {product.name}
-                    </h3>
-                    <div className="flex items-center gap-2">
-                      <div className="flex">{renderStars(product.rating)}</div>
-                      <span className="text-sm text-gray-600">({product.rating})</span>
-                    </div>
-                  </div>
-
-                  {/* Price */}
-                  <div className="flex items-center gap-2 mb-4">
-                    <span className="text-2xl font-bold text-green-600">{product.price}</span>
-                    {product.originalPrice && (
-                      <span className="text-sm text-gray-500 line-through">{product.originalPrice}</span>
-                    )}
-                  </div>
-
-                  {/* Features */}
-                  <div className="mb-6">
-                    <div className="grid grid-cols-2 gap-2">
-                      {product.features.slice(0, 4).map((feature, idx) => (
-                        <div key={idx} className="flex items-center gap-1">
-                          <div className="w-2 h-2 bg-blue-500 rounded-full flex-shrink-0"></div>
-                          <span className="text-xs text-gray-600 truncate">{feature}</span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Action Buttons */}
-                  <div className="flex gap-2">
-                    <motion.button
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                      onClick={() => handleContactForProduct(product.name)}
-                      className="flex-1 bg-gradient-to-r from-blue-600 to-green-600 text-white py-3 px-4 rounded-xl font-semibold text-sm flex items-center justify-center gap-2 hover:from-blue-700 hover:to-green-700 transition-all duration-300"
-                    >
-                      <MessageCircle className="w-4 h-4" />
-                      Buy Now
-                    </motion.button>
-                    <motion.button
-                      whileHover={{ scale: 1.1 }}
-                      whileTap={{ scale: 0.9 }}
-                      className="bg-gray-100 text-blue-600 p-3 rounded-xl hover:bg-blue-50 transition-colors duration-300"
-                    >
-                      <Eye className="w-4 h-4" />
-                    </motion.button>
-                  </div>
-                </div>
-              </motion.div>
-            ))}
+                {products[selectedCategory as keyof typeof products]?.map((product, index) => (
+                  <SwiperSlide key={product.id}>
+                    <ProductCard product={product} index={index} animationConfig={animationConfig} handleContactForProduct={handleContactForProduct} />
+                  </SwiperSlide>
+                ))}
+              </Swiper>
+            </div>
           </motion.div>
         </AnimatePresence>
 
@@ -322,6 +275,112 @@ const ProductShowcase: React.FC<ProductShowcaseProps> = ({ animationConfig }) =>
         </motion.div>
       </div>
     </section>
+  );
+};
+
+// Product Card Component
+const ProductCard: React.FC<{
+  product: any;
+  index: number;
+  animationConfig: any;
+  handleContactForProduct: (name: string) => void;
+}> = ({ product, index, animationConfig, handleContactForProduct }) => {
+  const renderStars = (rating: number) => {
+    return Array.from({ length: 5 }, (_, index) => (
+      <Star
+        key={index}
+        className={`w-4 h-4 ${
+          index < Math.floor(rating) ? 'text-yellow-400 fill-yellow-400' : 'text-gray-300'
+        }`}
+      />
+    ));
+  };
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 50, scale: 0.9 }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
+      transition={{
+        duration: animationConfig.motionDuration,
+        delay: index * animationConfig.motionStagger,
+        ease: animationConfig.motionEasing
+      }}
+      whileHover={{ y: -10, transition: { duration: 0.3 } }}
+      className="bg-white rounded-3xl shadow-lg overflow-hidden group hover:shadow-2xl transition-all duration-500 h-full"
+    >
+      {/* Product Badge */}
+      <div className="relative">
+        <div className="absolute top-4 left-4 z-10">
+          <span className="bg-gradient-to-r from-red-500 to-orange-500 text-white px-3 py-1 rounded-full text-sm font-bold">
+            {product.badge}
+          </span>
+        </div>
+        
+        {/* Product Image */}
+        <div className="relative h-48 overflow-hidden">
+          <img
+            src={product.image}
+            alt={product.name}
+            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+            loading="lazy"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+        </div>
+      </div>
+
+      <div className="p-6 flex flex-col h-full">
+        {/* Product Name & Rating */}
+        <div className="mb-3">
+          <h3 className="text-lg font-bold text-blue-900 mb-2 group-hover:text-blue-700 transition-colors">
+            {product.name}
+          </h3>
+          <div className="flex items-center gap-2">
+            <div className="flex">{renderStars(product.rating)}</div>
+            <span className="text-sm text-gray-600">({product.rating})</span>
+          </div>
+        </div>
+
+        {/* Price */}
+        <div className="flex items-center gap-2 mb-4">
+          <span className="text-2xl font-bold text-green-600">{product.price}</span>
+          {product.originalPrice && (
+            <span className="text-sm text-gray-500 line-through">{product.originalPrice}</span>
+          )}
+        </div>
+
+        {/* Features */}
+        <div className="mb-6 flex-grow">
+          <div className="grid grid-cols-2 gap-2">
+            {product.features.slice(0, 4).map((feature: string, idx: number) => (
+              <div key={idx} className="flex items-center gap-1">
+                <div className="w-2 h-2 bg-blue-500 rounded-full flex-shrink-0"></div>
+                <span className="text-xs text-gray-600 truncate">{feature}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Action Buttons */}
+        <div className="flex gap-2 mt-auto">
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={() => handleContactForProduct(product.name)}
+            className="flex-1 bg-gradient-to-r from-blue-600 to-green-600 text-white py-3 px-4 rounded-xl font-semibold text-sm flex items-center justify-center gap-2 hover:from-blue-700 hover:to-green-700 transition-all duration-300"
+          >
+            <MessageCircle className="w-4 h-4" />
+            Buy Now
+          </motion.button>
+          <motion.button
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+            className="bg-gray-100 text-blue-600 p-3 rounded-xl hover:bg-blue-50 transition-colors duration-300"
+          >
+            <Eye className="w-4 h-4" />
+          </motion.button>
+        </div>
+      </div>
+    </motion.div>
   );
 };
 

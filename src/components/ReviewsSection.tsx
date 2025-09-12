@@ -2,6 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Star, MessageCircle, Copy, Send, User, ExternalLink, CheckCircle, Mail, Gift, QrCode, Share2 } from 'lucide-react';
 import axios from 'axios';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Navigation, Pagination, Autoplay } from 'swiper/modules';
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
 
 interface Review {
   id: number;
@@ -253,61 +258,60 @@ const ReviewsSection: React.FC<ReviewsSectionProps> = ({ animationConfig }) => {
         </motion.div>
 
         {/* Reviews Grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
-          <AnimatePresence>
-            {reviews.map((review, index) => (
-              <motion.div
-                key={review.id}
-                initial={{ opacity: 0, y: 50, scale: 0.9 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                exit={{ opacity: 0, y: -50, scale: 0.9 }}
-                transition={{
-                  duration: animationConfig.motionDuration,
-                  delay: index * animationConfig.motionStagger,
-                  ease: animationConfig.motionEasing
-                }}
-                whileHover={{ y: -5, transition: { duration: 0.3 } }}
-                className="bg-gradient-to-br from-blue-50 to-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-500 border border-blue-100"
-              >
-                <div className="flex items-start gap-3 mb-4">
-                  <div className="bg-blue-100 rounded-full p-3 flex-shrink-0">
-                    <User className="w-6 h-6 text-blue-600" />
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <h4 className="font-bold text-blue-900 truncate">{review.name}</h4>
-                    <div className="flex items-center gap-2 mt-1">
-                      <div className="flex">{renderStars(review.rating)}</div>
-                      <span className="text-sm text-gray-500">{review.createdAt}</span>
-                    </div>
-                  </div>
-                </div>
+        <div className="mb-12">
+          {/* Desktop Grid */}
+          <div className="hidden md:grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <AnimatePresence>
+              {reviews.map((review, index) => (
+                <ReviewCard 
+                  key={review.id} 
+                  review={review} 
+                  index={index} 
+                  animationConfig={animationConfig}
+                  renderStars={renderStars}
+                  handleCopyReview={handleCopyReview}
+                  copiedReviewId={copiedReviewId}
+                />
+              ))}
+            </AnimatePresence>
+          </div>
 
-                <h5 className="font-semibold text-blue-800 mb-2">{review.title}</h5>
-                <p className="text-gray-700 text-sm leading-relaxed mb-4">{review.message}</p>
-
-                <div className="flex items-center gap-2">
-                  <motion.button
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    onClick={() => handleCopyReview(review)}
-                    className="flex items-center gap-2 text-blue-600 hover:text-blue-700 text-sm font-medium transition-colors duration-200"
-                  >
-                    {copiedReviewId === review.id ? (
-                      <>
-                        <CheckCircle className="w-4 h-4 text-green-500" />
-                        <span className="text-green-500">Copied!</span>
-                      </>
-                    ) : (
-                      <>
-                        <Copy className="w-4 h-4" />
-                        <span>Copy</span>
-                      </>
-                    )}
-                  </motion.button>
-                </div>
-              </motion.div>
-            ))}
-          </AnimatePresence>
+          {/* Mobile Slider */}
+          <div className="md:hidden">
+            <Swiper
+              modules={[Navigation, Pagination, Autoplay]}
+              spaceBetween={20}
+              slidesPerView={1.1}
+              centeredSlides={false}
+              navigation={true}
+              pagination={{ clickable: true }}
+              autoplay={{ delay: 5000, disableOnInteraction: false }}
+              breakpoints={{
+                480: {
+                  slidesPerView: 1.3,
+                  spaceBetween: 20,
+                },
+                640: {
+                  slidesPerView: 1.8,
+                  spaceBetween: 20,
+                },
+              }}
+              className="reviews-swiper"
+            >
+              {reviews.map((review, index) => (
+                <SwiperSlide key={review.id}>
+                  <ReviewCard 
+                    review={review} 
+                    index={index} 
+                    animationConfig={animationConfig}
+                    renderStars={renderStars}
+                    handleCopyReview={handleCopyReview}
+                    copiedReviewId={copiedReviewId}
+                  />
+                </SwiperSlide>
+              ))}
+            </Swiper>
+          </div>
         </div>
 
         {/* Action Buttons */}
@@ -670,6 +674,68 @@ const ReviewsSection: React.FC<ReviewsSectionProps> = ({ animationConfig }) => {
         </motion.div>
       </div>
     </section>
+  );
+};
+
+// Review Card Component
+const ReviewCard: React.FC<{
+  review: Review;
+  index: number;
+  animationConfig: any;
+  renderStars: (rating: number) => JSX.Element[];
+  handleCopyReview: (review: Review) => void;
+  copiedReviewId: number | null;
+}> = ({ review, index, animationConfig, renderStars, handleCopyReview, copiedReviewId }) => {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 50, scale: 0.9 }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
+      exit={{ opacity: 0, y: -50, scale: 0.9 }}
+      transition={{
+        duration: animationConfig.motionDuration,
+        delay: index * animationConfig.motionStagger,
+        ease: animationConfig.motionEasing
+      }}
+      whileHover={{ y: -5, transition: { duration: 0.3 } }}
+      className="bg-gradient-to-br from-blue-50 to-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-500 border border-blue-100 h-full"
+    >
+      <div className="flex items-start gap-3 mb-4">
+        <div className="bg-blue-100 rounded-full p-3 flex-shrink-0">
+          <User className="w-6 h-6 text-blue-600" />
+        </div>
+        <div className="flex-1 min-w-0">
+          <h4 className="font-bold text-blue-900 truncate">{review.name}</h4>
+          <div className="flex items-center gap-2 mt-1">
+            <div className="flex">{renderStars(review.rating)}</div>
+            <span className="text-sm text-gray-500">{review.createdAt}</span>
+          </div>
+        </div>
+      </div>
+
+      <h5 className="font-semibold text-blue-800 mb-2">{review.title}</h5>
+      <p className="text-gray-700 text-sm leading-relaxed mb-4 flex-grow">{review.message}</p>
+
+      <div className="flex items-center gap-2 mt-auto">
+        <motion.button
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          onClick={() => handleCopyReview(review)}
+          className="flex items-center gap-2 text-blue-600 hover:text-blue-700 text-sm font-medium transition-colors duration-200"
+        >
+          {copiedReviewId === review.id ? (
+            <>
+              <CheckCircle className="w-4 h-4 text-green-500" />
+              <span className="text-green-500">Copied!</span>
+            </>
+          ) : (
+            <>
+              <Copy className="w-4 h-4" />
+              <span>Copy</span>
+            </>
+          )}
+        </motion.button>
+      </div>
+    </motion.div>
   );
 };
 
