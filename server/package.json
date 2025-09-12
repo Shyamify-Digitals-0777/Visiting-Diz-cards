@@ -1,0 +1,29 @@
+{
+  "name": "harvinder-telecom-server",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Backend server for Harvinder Telecom Digital Visiting Card",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "express",
+    "sqlite",
+    "reviews",
+    "api"
+  ],
+  "author": "Harvinder Telecom",
+  "license": "MIT",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "nodemailer": "^7.0.6",
+    "sqlite3": "^5.1.6"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  }
+}
