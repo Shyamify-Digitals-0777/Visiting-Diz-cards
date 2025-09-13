@@ -19,11 +19,13 @@ interface Review {
 
 interface ReviewsSectionProps {
   animationConfig: any;
+  isDarkMode?: boolean;
 }
 
-const ReviewsSection: React.FC<ReviewsSectionProps> = ({ animationConfig }) => {
+const ReviewsSection: React.FC<ReviewsSectionProps> = ({ animationConfig, isDarkMode = false }) => {
   const [reviews, setReviews] = useState<Review[]>([]);
   const [showForm, setShowForm] = useState(false);
+  const [showAllReviews, setShowAllReviews] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
     rating: 5,
@@ -282,7 +284,7 @@ const ReviewsSection: React.FC<ReviewsSectionProps> = ({ animationConfig }) => {
     : "5.0";
 
   return (
-    <section className="py-16 bg-white">
+    <section className="py-16 bg-white dark:bg-gray-900 transition-colors duration-300">
       <div className="container mx-auto px-4">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -294,17 +296,17 @@ const ReviewsSection: React.FC<ReviewsSectionProps> = ({ animationConfig }) => {
           }}
           className="text-center mb-12"
         >
-          <h2 className="text-4xl font-bold text-blue-900 mb-4">Customer Reviews</h2>
+          <h2 className="text-4xl font-bold text-blue-900 dark:text-blue-400 mb-4">Customer Reviews</h2>
           <div className="flex items-center justify-center gap-4 mb-4">
             <div className="flex">{renderStars(Math.floor(parseFloat(averageRating)))}</div>
-            <span className="text-2xl font-bold text-blue-900">{averageRating}</span>
-            <span className="text-gray-600">({reviews.length} review{reviews.length !== 1 ? 's' : ''})</span>
+            <span className="text-2xl font-bold text-blue-900 dark:text-blue-400">{averageRating}</span>
+            <span className="text-gray-600 dark:text-gray-400">({reviews.length} review{reviews.length !== 1 ? 's' : ''})</span>
           </div>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+          <p className="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
             See what our satisfied customers have to say about their experience with us.
           </p>
           {reviews.length > 3 && (
-            <p className="text-sm text-blue-600 mt-2">
+            <p className="text-sm text-blue-600 dark:text-blue-400 mt-2">
               ✨ Including {reviews.filter(r => r.id > 1000).length} recent customer reviews
             </p>
           )}
@@ -313,7 +315,112 @@ const ReviewsSection: React.FC<ReviewsSectionProps> = ({ animationConfig }) => {
         {/* Reviews Grid */}
         <div className="mb-12">
           {/* Desktop Grid */}
-          <div className="hidden md:grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="hidden md:block">
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <AnimatePresence>
+                {reviews
+                  .slice(0, showAllReviews ? undefined : 6)
+                  .map((review, index) => (
+                    <ReviewCard 
+                      key={review.id} 
+                      review={review} 
+                      index={index} 
+                      animationConfig={animationConfig}
+                      renderStars={renderStars}
+                      handleCopyReview={handleCopyReview}
+                      copiedReviewId={copiedReviewId}
+                      isDarkMode={isDarkMode}
+                    />
+                  ))}
+              </AnimatePresence>
+            </div>
+            
+            {/* View More Button for Desktop */}
+            {reviews.length > 6 && (
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="text-center mt-8"
+              >
+                <motion.button
+                  onClick={() => setShowAllReviews(!showAllReviews)}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-full font-semibold transition-all duration-300 shadow-lg hover:shadow-xl"
+                >
+                  {showAllReviews ? 'View Less' : `View More Reviews (${reviews.length - 6} more)`}
+                </motion.button>
+              </motion.div>
+            )}
+          </div>
+
+          {/* Mobile Slider - Keep existing mobile slider */}
+          <div className="md:hidden">
+            <Swiper
+              modules={[Navigation, Pagination, Autoplay]}
+              spaceBetween={20}
+              slidesPerView={1.1}
+              centeredSlides={false}
+              navigation={true}
+              pagination={{ clickable: true }}
+              autoplay={{ delay: 5000, disableOnInteraction: false }}
+              breakpoints={{
+                480: {
+                  slidesPerView: 1.3,
+                  spaceBetween: 20,
+                },
+                640: {
+                  slidesPerView: 1.8,
+                  spaceBetween: 20,
+                },
+              }}
+              className="reviews-swiper"
+            >
+              {reviews.map((review, index) => (
+                <SwiperSlide key={review.id}>
+                  <ReviewCard 
+                    review={review} 
+                    index={index} 
+                    animationConfig={animationConfig}
+                    renderStars={renderStars}
+                    handleCopyReview={handleCopyReview}
+                    copiedReviewId={copiedReviewId}
+                    isDarkMode={isDarkMode}
+                  />
+                </SwiperSlide>
+              ))}
+            </Swiper>
+          </div>
+        </div>
+
+        {/* Action Buttons */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, delay: 0.4 }}
+          className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12"
+        >
+          <motion.button
+            onClick={() => setShowForm(!showForm)}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            className="flex items-center gap-2 bg-gradient-to-r from-blue-600 to-green-600 text-white px-8 py-4 rounded-full font-semibold text-lg shadow-lg hover:shadow-xl transition-all duration-300"
+          >
+            <MessageCircle className="w-5 h-5" />
+            Write a Review
+          </motion.button>
+
+          <motion.button
+            onClick={handlePostToGoogle}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            className={`flex items-center gap-2 ${isDarkMode ? 'bg-gray-700 text-blue-400 border-gray-600 hover:bg-gray-600' : 'bg-white text-blue-600 border-blue-600 hover:bg-blue-50'} border-2 px-8 py-4 rounded-full font-semibold text-lg transition-all duration-300`}
+          >
+            <ExternalLink className="w-5 h-5" />
+            Review on Google
+          </motion.button>
+        </motion.div>
             <AnimatePresence>
               {reviews.map((review, index) => (
                 <ReviewCard 
@@ -590,55 +697,55 @@ const ReviewsSection: React.FC<ReviewsSectionProps> = ({ animationConfig }) => {
               animate={{ opacity: 1, height: 'auto' }}
               exit={{ opacity: 0, height: 0 }}
               transition={{ duration: 0.5 }}
-              className="bg-gradient-to-br from-blue-50 to-white rounded-3xl shadow-xl p-8 border border-blue-200"
+              className={`bg-gradient-to-br ${isDarkMode ? 'from-gray-800 to-gray-700 border-gray-600' : 'from-blue-50 to-white border-blue-200'} rounded-3xl shadow-xl p-8 border`}
             >
-              <h3 className="text-2xl font-bold text-blue-900 mb-6 text-center">Share Your Experience</h3>
+              <h3 className={`text-2xl font-bold ${isDarkMode ? 'text-blue-400' : 'text-blue-900'} mb-6 text-center`}>Share Your Experience</h3>
               
               <form onSubmit={handleSubmitReview} className="space-y-6">
                 <div className="grid md:grid-cols-2 gap-6">
                   <div>
-                    <label className="block text-sm font-semibold text-blue-900 mb-2">Your Name *</label>
+                    <label className={`block text-sm font-semibold ${isDarkMode ? 'text-blue-400' : 'text-blue-900'} mb-2`}>Your Name *</label>
                     <input
                       type="text"
                       value={formData.name}
                       onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
                       required
-                      className="w-full px-4 py-3 rounded-xl border border-blue-200 focus:border-blue-500 focus:outline-none transition-colors duration-200"
+                      className={`w-full px-4 py-3 rounded-xl border ${isDarkMode ? 'border-gray-600 bg-gray-700 text-white focus:border-blue-400' : 'border-blue-200 focus:border-blue-500'} focus:outline-none transition-colors duration-200`}
                       placeholder="Enter your name"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-sm font-semibold text-blue-900 mb-2">Rating *</label>
+                    <label className={`block text-sm font-semibold ${isDarkMode ? 'text-blue-400' : 'text-blue-900'} mb-2`}>Rating *</label>
                     <div className="flex items-center gap-1">
                       {renderStars(formData.rating, true, (rating) => 
                         setFormData(prev => ({ ...prev, rating }))
                       )}
-                      <span className="ml-2 text-blue-900 font-medium">({formData.rating}/5)</span>
+                      <span className={`ml-2 ${isDarkMode ? 'text-blue-400' : 'text-blue-900'} font-medium`}>({formData.rating}/5)</span>
                     </div>
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-sm font-semibold text-blue-900 mb-2">Review Title *</label>
+                  <label className={`block text-sm font-semibold ${isDarkMode ? 'text-blue-400' : 'text-blue-900'} mb-2`}>Review Title *</label>
                   <input
                     type="text"
                     value={formData.title}
                     onChange={(e) => setFormData(prev => ({ ...prev, title: e.target.value }))}
                     required
-                    className="w-full px-4 py-3 rounded-xl border border-blue-200 focus:border-blue-500 focus:outline-none transition-colors duration-200"
+                    className={`w-full px-4 py-3 rounded-xl border ${isDarkMode ? 'border-gray-600 bg-gray-700 text-white focus:border-blue-400' : 'border-blue-200 focus:border-blue-500'} focus:outline-none transition-colors duration-200`}
                     placeholder="Summarize your experience"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-semibold text-blue-900 mb-2">Your Review *</label>
+                  <label className={`block text-sm font-semibold ${isDarkMode ? 'text-blue-400' : 'text-blue-900'} mb-2`}>Your Review *</label>
                   <textarea
                     value={formData.message}
                     onChange={(e) => setFormData(prev => ({ ...prev, message: e.target.value }))}
                     required
                     rows={4}
-                    className="w-full px-4 py-3 rounded-xl border border-blue-200 focus:border-blue-500 focus:outline-none resize-none transition-colors duration-200"
+                    className={`w-full px-4 py-3 rounded-xl border ${isDarkMode ? 'border-gray-600 bg-gray-700 text-white focus:border-blue-400' : 'border-blue-200 focus:border-blue-500'} focus:outline-none resize-none transition-colors duration-200`}
                     placeholder="Share your detailed experience with us..."
                   />
                 </div>
@@ -660,7 +767,7 @@ const ReviewsSection: React.FC<ReviewsSectionProps> = ({ animationConfig }) => {
                     onClick={() => setShowForm(false)}
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
-                    className="px-8 py-3 rounded-xl border border-gray-300 text-gray-700 hover:bg-gray-50 font-semibold transition-all duration-300"
+                    className={`px-8 py-3 rounded-xl border ${isDarkMode ? 'border-gray-600 text-gray-300 hover:bg-gray-600' : 'border-gray-300 text-gray-700 hover:bg-gray-50'} font-semibold transition-all duration-300`}
                   >
                     Cancel
                   </motion.button>
@@ -738,7 +845,8 @@ const ReviewCard: React.FC<{
   renderStars: (rating: number) => JSX.Element[];
   handleCopyReview: (review: Review) => void;
   copiedReviewId: number | null;
-}> = ({ review, index, animationConfig, renderStars, handleCopyReview, copiedReviewId }) => {
+  isDarkMode?: boolean;
+}> = ({ review, index, animationConfig, renderStars, handleCopyReview, copiedReviewId, isDarkMode = false }) => {
   return (
     <motion.div
       initial={{ opacity: 0, y: 50, scale: 0.9 }}
@@ -750,30 +858,30 @@ const ReviewCard: React.FC<{
         ease: animationConfig.motionEasing
       }}
       whileHover={{ y: -5, transition: { duration: 0.3 } }}
-      className="bg-gradient-to-br from-blue-50 to-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-500 border border-blue-100 h-full"
+      className={`bg-gradient-to-br ${isDarkMode ? 'from-gray-800 to-gray-700 border-gray-600' : 'from-blue-50 to-white border-blue-100'} rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-500 border h-full`}
     >
       <div className="flex items-start gap-3 mb-4">
-        <div className="bg-blue-100 rounded-full p-3 flex-shrink-0">
-          <User className="w-6 h-6 text-blue-600" />
+        <div className={`${isDarkMode ? 'bg-gray-600' : 'bg-blue-100'} rounded-full p-3 flex-shrink-0`}>
+          <User className={`w-6 h-6 ${isDarkMode ? 'text-blue-400' : 'text-blue-600'}`} />
         </div>
         <div className="flex-1 min-w-0">
-          <h4 className="font-bold text-blue-900 truncate">{review.name}</h4>
+          <h4 className={`font-bold ${isDarkMode ? 'text-blue-400' : 'text-blue-900'} truncate`}>{review.name}</h4>
           <div className="flex items-center gap-2 mt-1">
             <div className="flex">{renderStars(review.rating)}</div>
-            <span className="text-sm text-gray-500">{review.createdAt}</span>
+            <span className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>{review.createdAt}</span>
           </div>
         </div>
       </div>
 
-      <h5 className="font-semibold text-blue-800 mb-2">{review.title}</h5>
-      <p className="text-gray-700 text-sm leading-relaxed mb-4 flex-grow">{review.message}</p>
+      <h5 className={`font-semibold ${isDarkMode ? 'text-blue-300' : 'text-blue-800'} mb-2`}>{review.title}</h5>
+      <p className={`${isDarkMode ? 'text-gray-300' : 'text-gray-700'} text-sm leading-relaxed mb-4 flex-grow`}>{review.message}</p>
 
       <div className="flex items-center gap-2 mt-auto">
         <motion.button
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           onClick={() => handleCopyReview(review)}
-          className="flex items-center gap-2 text-blue-600 hover:text-blue-700 text-sm font-medium transition-colors duration-200"
+          className={`flex items-center gap-2 ${isDarkMode ? 'text-blue-400 hover:text-blue-300' : 'text-blue-600 hover:text-blue-700'} text-sm font-medium transition-colors duration-200`}
         >
           {copiedReviewId === review.id ? (
             <>
