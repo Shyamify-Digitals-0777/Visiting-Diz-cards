@@ -1,12 +1,26 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Phone, MessageCircle, MapPin, Share2 } from 'lucide-react';
+import DirectionModal from './DirectionModal';
 
 interface ContactBarProps {
   animationConfig: any;
 }
 
 const ContactBar: React.FC<ContactBarProps> = ({ animationConfig }) => {
+  const [showDirectionModal, setShowDirectionModal] = React.useState(false);
+
+  // Business data for direction modal
+  const businessData = {
+    name: "Harvinder Telecom",
+    address: "Shop No. 15, Main Market, Sector 22, Chandigarh - 160022",
+    phone: "+91 98765 43210",
+    hours: [
+      { day: "Monday - Saturday", time: "10:00 AM - 9:00 PM" },
+      { day: "Sunday", time: "11:00 AM - 8:00 PM" }
+    ]
+  };
+
   const handleShare = async () => {
     if (navigator.share) {
       try {
@@ -23,6 +37,10 @@ const ContactBar: React.FC<ContactBarProps> = ({ animationConfig }) => {
       navigator.clipboard.writeText(window.location.href);
       alert('Link copied to clipboard!');
     }
+  };
+
+  const handleDirections = () => {
+    setShowDirectionModal(true);
   };
 
   const contactButtons = [
@@ -43,7 +61,7 @@ const ContactBar: React.FC<ContactBarProps> = ({ animationConfig }) => {
     {
       icon: MapPin,
       label: 'Directions',
-      href: 'https://maps.google.com/?q=Harvinder+Telecom',
+      onClick: handleDirections,
       color: 'bg-red-600 hover:bg-red-700 btn-medium',
       delay: 0.3
     },
@@ -67,7 +85,7 @@ const ContactBar: React.FC<ContactBarProps> = ({ animationConfig }) => {
             return (
               <Component
                 key={index}
-                href={button.href}
+                href={button.href || undefined}
                 target={button.href?.startsWith('http') ? '_blank' : undefined}
                 rel={button.href?.startsWith('http') ? 'noopener noreferrer' : undefined}
                 onClick={button.onClick}
@@ -92,6 +110,13 @@ const ContactBar: React.FC<ContactBarProps> = ({ animationConfig }) => {
           })}
         </div>
       </div>
+
+      {/* Direction Modal */}
+      <DirectionModal
+        isOpen={showDirectionModal}
+        onClose={() => setShowDirectionModal(false)}
+        businessData={businessData}
+      />
     </section>
   );
 };

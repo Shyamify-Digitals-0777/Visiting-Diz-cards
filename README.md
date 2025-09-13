@@ -13,6 +13,8 @@ A comprehensive, production-ready Digital Visiting Card website for Harvinder Te
 - **Brand Partners Display** - Animated brand partner grid with hover effects
 - **Finance Partners** - EMI options with multiple banking partners
 - **Google My Business Integration** - Automated review collection and GMB promotion
+- **Interactive Direction Modal** - Comprehensive mapping and navigation functionality
+- **Profile Picture Modal** - Full-size profile viewing with download and share options
 
 ### Technical Features
 - **React 18 with TypeScript** - Modern React with type safety
@@ -24,6 +26,8 @@ A comprehensive, production-ready Digital Visiting Card website for Harvinder Te
 - **SEO Optimized** - Meta tags and structured data
 - **Email Automation** - Automated GMB review reminders with incentives
 - **Review Analytics** - Track review collection performance and conversion rates
+- **Accessibility Compliant** - WCAG 2.1 AA standards with keyboard navigation
+- **Cross-Browser Compatible** - Works on Chrome, Firefox, Safari, and Edge
 
 ## 🛠 Tech Stack
 
@@ -110,6 +114,8 @@ harvinder-telecom/
 │   │   ├── ReviewsSection.tsx   # Reviews with real-time updates
 │   │   ├── ReviewAnalytics.tsx  # Review performance dashboard
 │   │   └── Footer.tsx           # Footer with comprehensive info
+│   │   ├── DirectionModal.tsx   # Interactive direction and mapping modal
+│   │   └── ProfileModal.tsx     # Profile picture viewing modal
 │   ├── App.tsx                  # Main application component
 │   ├── App.css                  # Custom styles and animations
 │   ├── main.tsx                 # Application entry point
@@ -159,11 +165,28 @@ const animationConfig = {
 - Responsive call-to-action buttons
 - Smooth scroll indicator
 
+### Interactive Direction Modal
+- **Comprehensive Mapping**: Embedded Google Maps with full interactivity
+- **Business Information**: Complete contact details and operating hours
+- **Navigation Tools**: Direct links to Google Maps and directions
+- **Accessibility**: Full keyboard navigation and screen reader support
+- **Error Handling**: Graceful fallbacks when maps fail to load
+- **Mobile Optimized**: Responsive design for all screen sizes
+
+### Profile Picture Modal
+- **Full-Size Viewing**: High-quality profile image display
+- **Download Functionality**: Save profile pictures locally
+- **Share Integration**: Native Web Share API with fallbacks
+- **Professional Layout**: Clean, centered design with business information
+- **Achievements Display**: Showcase certifications and experience
+- **Touch-Friendly**: Optimized for mobile interaction
+
 ### Contact Bar
 - Sticky navigation with direct action buttons
 - Phone, WhatsApp, Maps, and Share functionality
 - Touch-optimized button sizes (44px minimum)
 - Smooth hover and tap animations
+- **Enhanced Direction Button**: Opens comprehensive direction modal instead of basic link
 
 ### Review System
 - Real-time review submission and display
@@ -178,6 +201,23 @@ const animationConfig = {
 - Interactive product cards with hover effects
 - Direct WhatsApp integration for inquiries
 - Responsive grid layout
+
+## 🎯 Accessibility Features
+
+### WCAG 2.1 AA Compliance
+- **Keyboard Navigation**: Full tab navigation support
+- **Screen Reader Support**: Proper ARIA labels and roles
+- **Focus Management**: Logical focus flow in modals
+- **High Contrast**: Support for high contrast mode
+- **Reduced Motion**: Respects user motion preferences
+- **Touch Targets**: Minimum 44px touch targets
+
+### Modal Accessibility
+- **Focus Trapping**: Focus stays within modal when open
+- **Escape Key**: Close modals with Escape key
+- **Outside Click**: Close modals by clicking backdrop
+- **ARIA Attributes**: Proper modal, dialog, and description attributes
+- **Focus Restoration**: Returns focus to trigger element on close
 
 ## 🔧 API Endpoints
 
@@ -351,14 +391,27 @@ To enable Google My Business integration, you need to find your Google Place ID:
 3. Go to "Info" tab
 4. The Place ID may be visible in the URL or business details
 
+## 🗺️ Google Maps API Setup (Optional)
+
+For enhanced mapping functionality, you can set up Google Maps API:
+
+### Getting API Key
+1. Go to [Google Cloud Console](https://console.cloud.google.com/)
+2. Create a new project or select existing one
+3. Enable "Maps Embed API" and "Maps JavaScript API"
+4. Create credentials (API Key)
+5. Restrict the API key to your domain for security
+
 ### Setting Up Place ID
 Once you have your Place ID:
 1. Copy your `.env.example` to `.env`
 2. Replace `ChIJN1t_tDeuEmsRUsoyG83frY4` with your actual Place ID
+3. Add your Google Maps API key (optional but recommended)
 3. Restart your development server
 
 ```env
 VITE_GOOGLE_PLACE_ID=YOUR_ACTUAL_PLACE_ID_HERE
+VITE_GOOGLE_MAPS_API_KEY=YOUR_GOOGLE_MAPS_API_KEY_HERE
 ```
 
 ### Testing the Integration
@@ -366,6 +419,8 @@ After setting up your Place ID:
 1. Submit a test review on your website
 2. Click "Post This Review on Google" in the confirmation modal
 3. Verify it opens the correct Google review page for your business
+4. Test the direction modal by clicking "Directions" in the contact bar
+5. Verify the interactive map loads correctly
 
 # Email Service (for GMB review reminders)
 EMAIL_USER=your-email@gmail.com
@@ -400,12 +455,26 @@ EMAIL_PASS=your-app-password
 - [ ] Email reminder system
 - [ ] GMB review link functionality
 - [ ] Analytics tracking
+- [ ] Direction modal functionality
+- [ ] Profile modal functionality
+- [ ] Keyboard navigation
+- [ ] Screen reader compatibility
+- [ ] Focus management in modals
+- [ ] Image download functionality
+- [ ] Map error handling
 
 ### Performance Testing
 ```bash
 # Run Lighthouse audit
 npm install -g lighthouse
 lighthouse http://localhost:5173 --view
+```
+
+### Accessibility Testing
+```bash
+# Install axe-core for accessibility testing
+npm install -g @axe-core/cli
+axe http://localhost:5173
 ```
 
 ## 🔒 Security
@@ -421,6 +490,8 @@ lighthouse http://localhost:5173 --view
 - **XSS Prevention** - React's built-in protection
 - **HTTPS Enforcement** - SSL/TLS in production
 - **Environment Variables** - Sensitive data in env files
+- **API Key Security** - Restricted API keys for production
+- **Content Security Policy** - CSP headers for additional security
 
 ## 🤝 Customization
 
@@ -429,12 +500,17 @@ lighthouse http://localhost:5173 --view
 2. **Modify color scheme** in `tailwind.config.js`
 3. **Replace logo and images** in public folder
 4. **Update contact details** throughout components
+5. **Customize profile information** in BusinessInfo component
+6. **Update map coordinates** for accurate location
 
 ### Feature Extensions
 - **Payment Integration** - Add Stripe/Razorpay
 - **Inventory Management** - Product stock tracking
 - **Customer Portal** - Order tracking system
 - **Analytics Dashboard** - Business insights
+- **Advanced Mapping** - Custom map markers and styles
+- **Social Media Integration** - Connect social profiles
+- **Multi-language Support** - Internationalization
 
 ## 📞 Support & Contact
 
@@ -442,6 +518,13 @@ For support or customization requests:
 - **WhatsApp**: +91 98765 43210
 - **Email**: info@harvinder-telecom.com
 - **Address**: Shop No. 15, Main Market, Sector 22, Chandigarh
+
+## 🎨 Design Credits
+
+- **Profile Badge Image**: Custom 3D rendered badge design
+- **Hero Background**: Modern tech-themed gradient design
+- **UI Components**: Custom React components with Framer Motion
+- **Icons**: Lucide React icon library
 
 ## 📄 License
 

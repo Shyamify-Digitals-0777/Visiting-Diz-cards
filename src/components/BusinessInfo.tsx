@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Star, MapPin, Clock, Award, X, ExternalLink, Phone, Mail } from 'lucide-react';
+import DirectionModal from './DirectionModal';
+import ProfileModal from './ProfileModal';
 
 interface BusinessInfoProps {
   animationConfig: any;
@@ -8,11 +10,15 @@ interface BusinessInfoProps {
 
 const BusinessInfo: React.FC<BusinessInfoProps> = ({ animationConfig }) => {
   const [showMapPopup, setShowMapPopup] = useState(false);
+  const [showDirectionModal, setShowDirectionModal] = useState(false);
+  const [showProfileModal, setShowProfileModal] = useState(false);
 
   const businessData = {
+    name: "Harvinder Telecom",
     rating: 4.8,
     totalReviews: 150,
-    address: "Shop No. 15, Main Market, Sector 22, Chandigarh - 160022",
+    address: "Shop No. 15, Main Market, Sector 22, Chandigarh - 160022", 
+    phone: "+91 98765 43210",
     hours: [
       { day: "Monday - Saturday", time: "10:00 AM - 9:00 PM" },
       { day: "Sunday", time: "11:00 AM - 8:00 PM" }
@@ -21,6 +27,22 @@ const BusinessInfo: React.FC<BusinessInfoProps> = ({ animationConfig }) => {
       { icon: Award, text: "10+ Years Experience" },
       { icon: Star, text: "Authorized Dealer" },
       { icon: MapPin, text: "Prime Location" }
+    ]
+  };
+
+  // Profile data for the business owner
+  const profileData = {
+    name: "Harvinder Singh",
+    title: "Owner & Electronics Expert",
+    image: "/10511561.jpg", // Using the provided profile image
+    description: "With over 10 years of experience in mobile and electronics retail, Harvinder Singh has built a reputation for providing genuine products and exceptional customer service in Chandigarh.",
+    achievements: [
+      "10+ Years in Electronics Retail",
+      "Authorized Dealer for 8+ Major Brands",
+      "5000+ Satisfied Customers",
+      "Expert in Mobile Repairs & Solutions",
+      "GST Registered Business",
+      "ISO Certified Service Quality"
     ]
   };
 
@@ -75,7 +97,7 @@ const BusinessInfo: React.FC<BusinessInfoProps> = ({ animationConfig }) => {
           className="bg-white dark:bg-gray-800 rounded-2xl md:rounded-3xl shadow-xl p-6 md:p-12 transition-colors duration-300"
         >
           <div className="grid md:grid-cols-2 gap-6 md:gap-8">
-            {/* Business Details */}
+            {/* Business Details with Profile */}
             <div className="space-y-6">
               <motion.div
                 initial={{ opacity: 0, x: -30 }}
@@ -84,6 +106,33 @@ const BusinessInfo: React.FC<BusinessInfoProps> = ({ animationConfig }) => {
                 transition={{ delay: 0.2, duration: 0.6 }}
               >
                 <h2 className="text-2xl md:text-3xl font-bold text-blue-900 dark:text-blue-400 mb-4 transition-colors duration-300">Business Information</h2>
+                
+                {/* Owner Profile Section */}
+                <div className="bg-gradient-to-r from-blue-50 to-green-50 dark:from-blue-900/20 dark:to-green-900/20 rounded-xl p-4 mb-6">
+                  <div className="flex items-center gap-4">
+                    <motion.div
+                      whileHover={{ scale: 1.05 }}
+                      className="cursor-pointer"
+                      onClick={() => setShowProfileModal(true)}
+                    >
+                      <img
+                        src={profileData.image}
+                        alt={`${profileData.name} profile picture`}
+                        className="w-16 h-16 rounded-full object-cover border-3 border-white shadow-lg hover:shadow-xl transition-shadow duration-300"
+                      />
+                    </motion.div>
+                    <div>
+                      <h3 className="font-bold text-blue-900 dark:text-blue-400">{profileData.name}</h3>
+                      <p className="text-sm text-gray-600 dark:text-gray-300">{profileData.title}</p>
+                      <button
+                        onClick={() => setShowProfileModal(true)}
+                        className="text-xs text-blue-600 dark:text-blue-400 hover:underline mt-1 focus:outline-none focus:underline"
+                      >
+                        View Full Profile
+                      </button>
+                    </div>
+                  </div>
+                </div>
                 
                 {/* Rating */}
                 <div className="flex items-center gap-3 mb-4">
@@ -95,7 +144,15 @@ const BusinessInfo: React.FC<BusinessInfoProps> = ({ animationConfig }) => {
                 {/* Address */}
                 <div className="flex items-start gap-3 mb-4">
                   <MapPin className="w-6 h-6 text-red-500 flex-shrink-0 mt-1" />
-                  <p className="text-gray-700 dark:text-gray-300 leading-relaxed text-sm md:text-base">{businessData.address}</p>
+                  <div className="flex-1">
+                    <p className="text-gray-700 dark:text-gray-300 leading-relaxed text-sm md:text-base">{businessData.address}</p>
+                    <button
+                      onClick={() => setShowDirectionModal(true)}
+                      className="text-blue-600 dark:text-blue-400 hover:underline text-sm mt-1 focus:outline-none focus:underline"
+                    >
+                      Get Directions
+                    </button>
+                  </div>
                 </div>
 
                 {/* Hours */}
@@ -113,6 +170,20 @@ const BusinessInfo: React.FC<BusinessInfoProps> = ({ animationConfig }) => {
                 </div>
               </motion.div>
             </div>
+
+            {/* Direction Modal */}
+            <DirectionModal
+              isOpen={showDirectionModal}
+              onClose={() => setShowDirectionModal(false)}
+              businessData={businessData}
+            />
+
+            {/* Profile Modal */}
+            <ProfileModal
+              isOpen={showProfileModal}
+              onClose={() => setShowProfileModal(false)}
+              profileData={profileData}
+            />
 
             {/* Map and Achievements */}
             <div className="space-y-4 md:space-y-6">
