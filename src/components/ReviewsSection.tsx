@@ -392,7 +392,6 @@ const ReviewsSection: React.FC<ReviewsSectionProps> = ({ animationConfig, isDark
             </Swiper>
           </div>
         </div>
-        </div>
 
         {/* Action Buttons */}
         <motion.div
@@ -406,7 +405,7 @@ const ReviewsSection: React.FC<ReviewsSectionProps> = ({ animationConfig, isDark
             onClick={() => setShowForm(!showForm)}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            className="flex items-center gap-2 bg-gradient-to-r from-blue-600 to-green-600 text-white px-8 py-4 rounded-full font-semibold text-lg shadow-lg hover:shadow-xl transition-all duration-300"
+            className="flex items-center gap-2 bg-gradient-to-r from-blue-600 to-green-600 text-white px-8 py-4 rounded-full font-semibold text-lg shadow-lg hover:shadow-xl transition-all duration-300 btn-large"
           >
             <MessageCircle className="w-5 h-5" />
             Write a Review
@@ -416,7 +415,7 @@ const ReviewsSection: React.FC<ReviewsSectionProps> = ({ animationConfig, isDark
             onClick={handlePostToGoogle}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            className="flex items-center gap-2 bg-white text-blue-600 border-2 border-blue-600 px-8 py-4 rounded-full font-semibold text-lg hover:bg-blue-50 transition-all duration-300"
+            className="flex items-center gap-2 bg-white text-blue-600 border-2 border-blue-600 px-8 py-4 rounded-full font-semibold text-lg hover:bg-blue-50 transition-all duration-300 btn-large"
           >
             <ExternalLink className="w-5 h-5" />
             Review on Google
@@ -752,6 +751,7 @@ const ReviewsSection: React.FC<ReviewsSectionProps> = ({ animationConfig, isDark
             </div>
           </div>
         </motion.div>
+      </div>
     </section>
   );
 };
