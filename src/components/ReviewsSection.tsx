@@ -752,7 +752,6 @@ const ReviewsSection: React.FC<ReviewsSectionProps> = ({ animationConfig, isDark
             </div>
           </div>
         </motion.div>
-      </div>
     </section>
   );
 };
