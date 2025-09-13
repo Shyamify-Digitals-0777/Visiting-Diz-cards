@@ -80,7 +80,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ animationConfig }) => {
             href="tel:+919876543210"
             whileHover={{ scale: animationConfig.hoverScale }}
             whileTap={{ scale: animationConfig.tapScale }}
-            className="bg-green-500 hover:bg-green-600 text-white px-8 py-4 rounded-full font-semibold text-lg shadow-lg transition-all duration-300"
+            className="bg-green-500 hover:bg-green-600 text-white px-8 py-4 rounded-full font-semibold text-lg shadow-lg transition-all duration-300 btn-large"
           >
             Call Now: +91 98765 43210
           </motion.a>
@@ -90,7 +90,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ animationConfig }) => {
             rel="noopener noreferrer"
             whileHover={{ scale: animationConfig.hoverScale }}
             whileTap={{ scale: animationConfig.tapScale }}
-            className="bg-white/20 hover:bg-white/30 text-white px-8 py-4 rounded-full font-semibold text-lg glass-effect transition-all duration-300"
+            className="bg-white/20 hover:bg-white/30 text-white px-8 py-4 rounded-full font-semibold text-lg glass-effect transition-all duration-300 btn-large"
           >
             WhatsApp Chat
           </motion.a>

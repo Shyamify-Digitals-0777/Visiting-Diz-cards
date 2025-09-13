@@ -30,28 +30,28 @@ const ContactBar: React.FC<ContactBarProps> = ({ animationConfig }) => {
       icon: Phone,
       label: 'Call',
       href: 'tel:+919876543210',
-      color: 'bg-blue-600 hover:bg-blue-700',
+      color: 'bg-blue-600 hover:bg-blue-700 btn-medium',
       delay: 0.1
     },
     {
       icon: MessageCircle,
       label: 'WhatsApp',
       href: 'https://wa.me/919876543210',
-      color: 'bg-green-600 hover:bg-green-700',
+      color: 'bg-green-600 hover:bg-green-700 btn-medium',
       delay: 0.2
     },
     {
       icon: MapPin,
       label: 'Directions',
       href: 'https://maps.google.com/?q=Harvinder+Telecom',
-      color: 'bg-red-600 hover:bg-red-700',
+      color: 'bg-red-600 hover:bg-red-700 btn-medium',
       delay: 0.3
     },
     {
       icon: Share2,
       label: 'Share',
       onClick: handleShare,
-      color: 'bg-purple-600 hover:bg-purple-700',
+      color: 'bg-purple-600 hover:bg-purple-700 btn-medium',
       delay: 0.4
     }
   ];
@@ -83,10 +83,10 @@ const ContactBar: React.FC<ContactBarProps> = ({ animationConfig }) => {
                   transition: { duration: 0.2 },
                 }}
                 whileTap={{ scale: animationConfig.tapScale }}
-                className={`${button.color} text-white p-3 md:p-4 rounded-xl md:rounded-2xl text-center transition-all duration-300 shadow-lg hover:shadow-xl group w-full`}
+                className={`${button.color} text-white rounded-xl md:rounded-2xl text-center transition-all duration-300 shadow-lg hover:shadow-xl group flex flex-col items-center justify-center`}
               >
                 <Icon className="w-6 h-6 md:w-8 md:h-8 mx-auto mb-1 md:mb-2 group-hover:scale-110 transition-transform duration-200" />
-                <span className="font-semibold text-xs md:text-base block">{button.label}</span>
+                <span className="font-semibold text-xs md:text-sm block">{button.label}</span>
               </Component>
             );
           })}

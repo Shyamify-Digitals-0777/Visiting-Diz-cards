@@ -25,7 +25,7 @@ function App() {
   const [isDarkMode, setIsDarkMode] = useState(false);
 
   useEffect(() => {
-    // Check for saved theme preference or default to light mode
+    // Check for saved theme preference or default to system preference
     const savedTheme = localStorage.getItem('theme');
     if (savedTheme) {
       setIsDarkMode(savedTheme === 'dark');
@@ -35,12 +35,14 @@ function App() {
   }, []);
 
   useEffect(() => {
-    // Apply theme to document
+    // Apply theme to document root and body for global effect
     if (isDarkMode) {
       document.documentElement.classList.add('dark');
+      document.body.classList.add('dark');
       localStorage.setItem('theme', 'dark');
     } else {
       document.documentElement.classList.remove('dark');
+      document.body.classList.remove('dark');
       localStorage.setItem('theme', 'light');
     }
   }, [isDarkMode]);
@@ -68,6 +70,11 @@ function App() {
 
   const toggleTheme = () => {
     setIsDarkMode(!isDarkMode);
+    
+    // Dispatch custom event for components that need to react to theme changes
+    window.dispatchEvent(new CustomEvent('themeChange', { 
+      detail: { isDarkMode: !isDarkMode } 
+    }));
   };
 
   return (
