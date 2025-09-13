@@ -8,7 +8,7 @@ interface HeroSectionProps {
 
 const HeroSection: React.FC<HeroSectionProps> = ({ animationConfig }) => {
   return (
-    <section className="min-h-screen parallax-bg flex items-center justify-center relative overflow-hidden">
+    <section className="min-h-screen hero-bg flex items-center justify-center relative overflow-hidden">
       {/* Animated background elements */}
       <motion.div
         className="absolute inset-0"
@@ -16,6 +16,8 @@ const HeroSection: React.FC<HeroSectionProps> = ({ animationConfig }) => {
         animate={{ opacity: 1 }}
         transition={{ duration: 2 }}
       >
+        {/* Dark overlay for better text readability */}
+        <div className="absolute inset-0 bg-black/40"></div>
         <div className="absolute top-20 left-10 w-32 h-32 bg-white/10 rounded-full blur-xl"></div>
         <div className="absolute bottom-20 right-10 w-48 h-48 bg-green-500/10 rounded-full blur-xl"></div>
       </motion.div>
