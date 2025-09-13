@@ -43,7 +43,7 @@ const FinancePartners: React.FC<FinancePartnersProps> = ({ animationConfig }) =>
         </motion.div>
 
         {/* Finance Partners Grid */}
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-6 mb-16">
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6 mb-12 md:mb-16">
           {financePartners.map((partner, index) => (
             <motion.div
               key={index}
@@ -59,15 +59,15 @@ const FinancePartners: React.FC<FinancePartnersProps> = ({ animationConfig }) =>
                 scale: animationConfig.hoverScale,
                 transition: { duration: 0.3 }
               }}
-              className={`${partner.color} rounded-2xl p-6 text-white relative overflow-hidden group cursor-pointer hover-lift`}
+              className={`${partner.color} rounded-xl md:rounded-2xl p-4 md:p-6 text-white relative overflow-hidden group cursor-pointer hover-lift min-h-[120px] md:min-h-[140px] flex flex-col justify-center`}
             >
               <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent"></div>
               <div className="relative z-10 text-center">
-                <div className="bg-white/20 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
-                  <CreditCard className="w-8 h-8 text-white" />
+                <div className="bg-white/20 rounded-full w-12 h-12 md:w-16 md:h-16 flex items-center justify-center mx-auto mb-3 md:mb-4">
+                  <CreditCard className="w-6 h-6 md:w-8 md:h-8 text-white" />
                 </div>
-                <h3 className="text-xl font-bold mb-2">{partner.name}</h3>
-                <p className="text-sm text-white/90 font-medium">{partner.offer}</p>
+                <h3 className="text-lg md:text-xl font-bold mb-2">{partner.name}</h3>
+                <p className="text-xs md:text-sm text-white/90 font-medium leading-tight">{partner.offer}</p>
               </div>
               
               {/* Animated background effect */}
@@ -112,12 +112,12 @@ const FinancePartners: React.FC<FinancePartnersProps> = ({ animationConfig }) =>
                 >
                   <motion.div
                     whileHover={{ scale: 1.1, rotate: 5 }}
-                    className="bg-gradient-to-br from-blue-500 to-green-500 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4 group-hover:shadow-lg transition-shadow duration-300"
+                    className="bg-gradient-to-br from-blue-500 to-green-500 rounded-full w-12 h-12 md:w-16 md:h-16 flex items-center justify-center mx-auto mb-4 group-hover:shadow-lg transition-shadow duration-300"
                   >
-                    <Icon className="w-8 h-8 text-white" />
+                    <Icon className="w-6 h-6 md:w-8 md:h-8 text-white" />
                   </motion.div>
-                  <h4 className="text-lg font-bold text-blue-900 mb-2">{feature.title}</h4>
-                  <p className="text-gray-600 text-sm leading-relaxed">{feature.description}</p>
+                  <h4 className="text-base md:text-lg font-bold text-blue-900 mb-2">{feature.title}</h4>
+                  <p className="text-gray-600 text-xs md:text-sm leading-relaxed">{feature.description}</p>
                 </motion.div>
               );
             })}

@@ -48,9 +48,9 @@ const BusinessInfo: React.FC<BusinessInfoProps> = ({ animationConfig }) => {
             duration: animationConfig.motionDuration,
             ease: animationConfig.motionEasing
           }}
-          className="bg-white rounded-3xl shadow-xl p-8 md:p-12"
+          className="bg-white dark:bg-gray-800 rounded-2xl md:rounded-3xl shadow-xl p-6 md:p-12 transition-colors duration-300"
         >
-          <div className="grid md:grid-cols-2 gap-8">
+          <div className="grid md:grid-cols-2 gap-6 md:gap-8">
             {/* Business Details */}
             <div className="space-y-6">
               <motion.div
@@ -59,31 +59,31 @@ const BusinessInfo: React.FC<BusinessInfoProps> = ({ animationConfig }) => {
                 viewport={{ once: true }}
                 transition={{ delay: 0.2, duration: 0.6 }}
               >
-                <h2 className="text-3xl font-bold text-blue-900 mb-4">Business Information</h2>
+                <h2 className="text-2xl md:text-3xl font-bold text-blue-900 dark:text-blue-400 mb-4 transition-colors duration-300">Business Information</h2>
                 
                 {/* Rating */}
                 <div className="flex items-center gap-3 mb-4">
                   <div className="flex">{renderStars(businessData.rating)}</div>
-                  <span className="text-2xl font-bold text-blue-900">{businessData.rating}</span>
-                  <span className="text-gray-600">({businessData.totalReviews} reviews)</span>
+                  <span className="text-xl md:text-2xl font-bold text-blue-900 dark:text-blue-400">{businessData.rating}</span>
+                  <span className="text-gray-600 dark:text-gray-400 text-sm md:text-base">({businessData.totalReviews} reviews)</span>
                 </div>
 
                 {/* Address */}
                 <div className="flex items-start gap-3 mb-4">
                   <MapPin className="w-6 h-6 text-red-500 flex-shrink-0 mt-1" />
-                  <p className="text-gray-700 leading-relaxed">{businessData.address}</p>
+                  <p className="text-gray-700 dark:text-gray-300 leading-relaxed text-sm md:text-base">{businessData.address}</p>
                 </div>
 
                 {/* Hours */}
                 <div className="space-y-2">
                   <div className="flex items-center gap-2 mb-2">
                     <Clock className="w-5 h-5 text-blue-600" />
-                    <span className="font-semibold text-blue-900">Operating Hours</span>
+                    <span className="font-semibold text-blue-900 dark:text-blue-400 text-sm md:text-base">Operating Hours</span>
                   </div>
                   {businessData.hours.map((hour, index) => (
-                    <div key={index} className="flex justify-between items-center bg-gray-50 rounded-lg px-4 py-2">
-                      <span className="text-gray-700">{hour.day}</span>
-                      <span className="font-medium text-blue-900">{hour.time}</span>
+                    <div key={index} className="flex justify-between items-center bg-gray-50 dark:bg-gray-700 rounded-lg px-3 md:px-4 py-2 transition-colors duration-300">
+                      <span className="text-gray-700 dark:text-gray-300 text-sm md:text-base">{hour.day}</span>
+                      <span className="font-medium text-blue-900 dark:text-blue-400 text-sm md:text-base">{hour.time}</span>
                     </div>
                   ))}
                 </div>
@@ -91,13 +91,13 @@ const BusinessInfo: React.FC<BusinessInfoProps> = ({ animationConfig }) => {
             </div>
 
             {/* Map and Achievements */}
-            <div className="space-y-6">
+            <div className="space-y-4 md:space-y-6">
               <motion.div
                 initial={{ opacity: 0, x: 30 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: 0.4, duration: 0.6 }}
-                className="bg-gray-100 rounded-2xl h-64 flex items-center justify-center relative overflow-hidden"
+                className="bg-gray-100 dark:bg-gray-700 rounded-xl md:rounded-2xl h-48 md:h-64 flex items-center justify-center relative overflow-hidden transition-colors duration-300"
               >
                 <iframe
                   src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3429.8674775892937!2d76.7682542!3d30.7333148!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMzDCsDQ0JzAwLjAiTiA3NsKwNDYnMDUuNyJF!5e0!3m2!1sen!2sin!4v1635789123456!5m2!1sen!2sin"

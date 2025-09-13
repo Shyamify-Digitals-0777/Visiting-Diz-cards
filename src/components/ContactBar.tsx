@@ -57,9 +57,9 @@ const ContactBar: React.FC<ContactBarProps> = ({ animationConfig }) => {
   ];
 
   return (
-    <section className="py-6 bg-white dark:bg-gray-800 shadow-lg sticky top-0 z-40 transition-colors duration-300">
-      <div className="container mx-auto px-4 max-w-6xl">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 max-w-4xl mx-auto">
+    <section className="py-4 md:py-6 bg-white dark:bg-gray-800 shadow-lg sticky top-0 z-40 transition-colors duration-300">
+      <div className="container mx-auto px-3 md:px-4 max-w-6xl">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-4 max-w-5xl mx-auto">
           {contactButtons.map((button, index) => {
             const Icon = button.icon;
             const Component = button.href ? motion.a : motion.button;
@@ -83,10 +83,10 @@ const ContactBar: React.FC<ContactBarProps> = ({ animationConfig }) => {
                   transition: { duration: 0.2 },
                 }}
                 whileTap={{ scale: animationConfig.tapScale }}
-                className={`${button.color} text-white rounded-xl md:rounded-2xl text-center transition-all duration-300 shadow-lg hover:shadow-xl group flex flex-col items-center justify-center`}
+                className={`${button.color} text-white rounded-lg md:rounded-xl text-center transition-all duration-300 shadow-lg hover:shadow-xl group flex flex-col items-center justify-center min-h-[60px] md:min-h-[80px]`}
               >
-                <Icon className="w-6 h-6 md:w-8 md:h-8 mx-auto mb-1 md:mb-2 group-hover:scale-110 transition-transform duration-200" />
-                <span className="font-semibold text-xs md:text-sm block">{button.label}</span>
+                <Icon className="w-5 h-5 md:w-7 md:h-7 mx-auto mb-1 group-hover:scale-110 transition-transform duration-200" />
+                <span className="font-semibold text-xs md:text-sm block leading-tight">{button.label}</span>
               </Component>
             );
           })}

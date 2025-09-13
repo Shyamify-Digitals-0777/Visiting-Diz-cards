@@ -56,16 +56,16 @@ const BrandPartners: React.FC<BrandPartnersProps> = ({ animationConfig }) => {
               }}
               className="group cursor-pointer"
             >
-              <div className={`${brand.color} rounded-3xl p-6 text-white relative overflow-hidden hover-lift`}>
+              <div className={`${brand.color} rounded-2xl md:rounded-3xl p-4 md:p-6 text-white relative overflow-hidden hover-lift min-h-[120px] md:min-h-[140px] flex flex-col justify-center`}>
                 <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent"></div>
                 <div className="relative z-10">
                   <div className="flex items-center justify-center mb-4">
                     <div className="bg-white/20 rounded-full p-3">
-                      <Smartphone className="w-8 h-8 text-white" />
+                      <Smartphone className="w-6 h-6 md:w-8 md:h-8 text-white" />
                     </div>
                   </div>
-                  <h3 className="text-2xl font-bold mb-2 text-center">{brand.name}</h3>
-                  <p className="text-sm text-white/90 text-center leading-relaxed">
+                  <h3 className="text-lg md:text-2xl font-bold mb-2 text-center">{brand.name}</h3>
+                  <p className="text-xs md:text-sm text-white/90 text-center leading-relaxed">
                     {brand.description}
                   </p>
                 </div>
