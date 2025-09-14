@@ -1,12 +1,16 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Smartphone } from 'lucide-react';
+import BrandProductModal from './BrandProductModal';
 
 interface BrandPartnersProps {
   animationConfig: any;
 }
 
 const BrandPartners: React.FC<BrandPartnersProps> = ({ animationConfig }) => {
+  const [selectedBrand, setSelectedBrand] = React.useState<string | null>(null);
+  const [showModal, setShowModal] = React.useState(false);
+
   const brands = [
     { name: 'Samsung', description: 'Premium smartphones and accessories', color: 'bg-blue-500' },
     { name: 'Apple', description: 'iPhone, iPad, MacBook and accessories', color: 'bg-gray-800' },
@@ -17,6 +21,16 @@ const BrandPartners: React.FC<BrandPartnersProps> = ({ animationConfig }) => {
     { name: 'Realme', description: 'Youth-focused mobile devices', color: 'bg-yellow-500' },
     { name: 'Motorola', description: 'Durable and reliable phones', color: 'bg-indigo-500' }
   ];
+
+  const handleBrandClick = (brandName: string) => {
+    setSelectedBrand(brandName);
+    setShowModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+    setSelectedBrand(null);
+  };
 
   return (
     <section className="py-16 bg-white">
@@ -55,6 +69,7 @@ const BrandPartners: React.FC<BrandPartnersProps> = ({ animationConfig }) => {
                 transition: { duration: 0.3 }
               }}
               className="group cursor-pointer"
+              onClick={() => handleBrandClick(brand.name)}
             >
               <div className={`${brand.color} rounded-2xl md:rounded-3xl p-4 md:p-6 text-white relative overflow-hidden hover-lift min-h-[120px] md:min-h-[140px] flex flex-col justify-center`}>
                 <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent"></div>
@@ -118,6 +133,15 @@ const BrandPartners: React.FC<BrandPartnersProps> = ({ animationConfig }) => {
             </div>
           </div>
         </motion.div>
+
+        {/* Brand Product Modal */}
+        <BrandProductModal
+          isOpen={showModal}
+          onClose={handleCloseModal}
+          brandName={selectedBrand || ''}
+          brandColor={brands.find(b => b.name === selectedBrand)?.color || 'bg-blue-500'}
+          animationConfig={animationConfig}
+        />
       </div>
     </section>
   );
