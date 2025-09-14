@@ -7,7 +7,6 @@ import BusinessInfo from './components/BusinessInfo';
 import BrandPartners from './components/BrandPartners';
 import FinancePartners from './components/FinancePartners';
 import ProductShowcase from './components/ProductShowcase';
-import ProductGallery from './components/ProductGallery';
 import ReviewsSection from './components/ReviewsSection';
 import Footer from './components/Footer';
 import './App.css';
@@ -100,7 +99,6 @@ function App() {
       <BrandPartners animationConfig={animationConfig} />
       <FinancePartners animationConfig={animationConfig} />
       <ProductShowcase animationConfig={animationConfig} isDarkMode={isDarkMode} />
-      <ProductGallery animationConfig={animationConfig} />
       <ReviewsSection animationConfig={animationConfig} isDarkMode={isDarkMode} />
       <Footer animationConfig={animationConfig} />
     </div>
