@@ -167,6 +167,124 @@ html {
 .thumbnail-swiper .swiper-button-prev:after {
   font-size: 14px;
 }
+
+/* Featured Slideshow Custom Styles */
+.featured-slideshow .swiper-pagination-bullet {
+  background: rgba(255, 255, 255, 0.5);
+  opacity: 1;
+  width: 12px;
+  height: 12px;
+  margin: 0 6px;
+  transition: all 0.3s ease;
+}
+
+.featured-slideshow .swiper-pagination-bullet-active {
+  background: white;
+  transform: scale(1.2);
+}
+
+.featured-slideshow .swiper-button-next,
+.featured-slideshow .swiper-button-prev {
+  width: 50px;
+  height: 50px;
+  margin-top: -25px;
+  color: white;
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  transition: all 0.3s ease;
+}
+
+.featured-slideshow .swiper-button-next:hover,
+.featured-slideshow .swiper-button-prev:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: scale(1.1);
+}
+
+.featured-slideshow .swiper-button-next:after,
+.featured-slideshow .swiper-button-prev:after {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+/* Product Gallery Enhancements */
+.product-card-hover {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.product-card-hover:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+}
+
+/* Line clamp utility */
+.line-clamp-1 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+}
+
+.line-clamp-2 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+/* Smooth scrolling for pagination */
+.pagination-smooth {
+  scroll-behavior: smooth;
+}
+
+/* Loading animation for lazy images */
+.image-loading {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: loading 1.5s infinite;
+}
+
+@keyframes loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* Enhanced filter dropdown animations */
+.filter-dropdown {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.filter-dropdown:focus {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+}
+
+/* Product grid responsive enhancements */
+@media (max-width: 640px) {
+  .product-grid-mobile {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1rem;
+  }
+}
+
+@media (min-width: 641px) and (max-width: 1024px) {
+  .product-grid-tablet {
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+  }
+}
+
+@media (min-width: 1025px) {
+  .product-grid-desktop {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+  }
+}
 /* Button Size Classes */
 .btn-small {
   min-width: 80px !important;

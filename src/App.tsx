@@ -4,6 +4,8 @@ import { Sun, Moon } from 'lucide-react';
 import HeroSection from './components/HeroSection';
 import ContactBar from './components/ContactBar';
 import BusinessInfo from './components/BusinessInfo';
+import FeaturedSlideshow from './components/FeaturedSlideshow';
+import ProductGallery from './components/ProductGallery';
 import BrandPartners from './components/BrandPartners';
 import FinancePartners from './components/FinancePartners';
 import ProductShowcase from './components/ProductShowcase';
@@ -96,6 +98,8 @@ function App() {
       <HeroSection animationConfig={animationConfig} />
       <ContactBar animationConfig={animationConfig} />
       <BusinessInfo animationConfig={animationConfig} />
+      <FeaturedSlideshow animationConfig={animationConfig} isDarkMode={isDarkMode} />
+      <ProductGallery animationConfig={animationConfig} isDarkMode={isDarkMode} />
       <BrandPartners animationConfig={animationConfig} />
       <FinancePartners animationConfig={animationConfig} />
       <ProductShowcase animationConfig={animationConfig} isDarkMode={isDarkMode} />
