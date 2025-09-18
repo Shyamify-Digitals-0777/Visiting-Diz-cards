@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Star, Heart, Share2, Eye, ShoppingCart, Filter, Grid, List, ChevronDown } from 'lucide-react';
+import ProductModal from './ProductModal';
 
 interface Product {
   id: number;
@@ -35,6 +36,8 @@ const ProductGallery: React.FC<ProductGalleryProps> = ({ animationConfig, isDark
   const [currentPage, setCurrentPage] = useState(1);
   const [favorites, setFavorites] = useState<number[]>([]);
   const productsPerPage = 12;
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const [showProductModal, setShowProductModal] = useState(false);
 
   // Sample product data
   const allProducts: Product[] = [
@@ -258,6 +261,16 @@ const ProductGallery: React.FC<ProductGalleryProps> = ({ animationConfig, isDark
     window.open(whatsappUrl, '_blank');
   };
 
+  const handleQuickView = (product: Product) => {
+    setSelectedProduct(product);
+    setShowProductModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setShowProductModal(false);
+    setSelectedProduct(null);
+  };
+
   const renderStars = (rating: number) => {
     return Array.from({ length: 5 }, (_, index) => (
       <Star
@@ -461,6 +474,7 @@ const ProductGallery: React.FC<ProductGalleryProps> = ({ animationConfig, isDark
                 onToggleFavorite={() => toggleFavorite(product.id)}
                 onShare={() => handleShare(product)}
                 onContact={() => handleContact(product)}
+                onQuickView={() => handleQuickView(product)}
                 renderStars={renderStars}
                 animationConfig={animationConfig}
               />
@@ -511,6 +525,14 @@ const ProductGallery: React.FC<ProductGalleryProps> = ({ animationConfig, isDark
             </button>
           </motion.div>
         )}
+
+        {/* Product Modal */}
+        <ProductModal
+          isOpen={showProductModal}
+          onClose={handleCloseModal}
+          product={selectedProduct}
+          isDarkMode={isDarkMode}
+        />
       </div>
     </section>
   );
@@ -526,6 +548,7 @@ const ProductCard: React.FC<{
   onToggleFavorite: () => void;
   onShare: () => void;
   onContact: () => void;
+  onQuickView: () => void;
   renderStars: (rating: number) => JSX.Element[];
   animationConfig: any;
 }> = ({ 
@@ -537,6 +560,7 @@ const ProductCard: React.FC<{
   onToggleFavorite, 
   onShare, 
   onContact, 
+  onQuickView,
   renderStars,
   animationConfig 
 }) => {
@@ -631,6 +655,7 @@ const ProductCard: React.FC<{
                 Contact
               </button>
               <button className="flex items-center gap-2 border border-blue-600 text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/20 px-4 py-2 rounded-lg font-semibold transition-colors">
+                onClick={onQuickView}
                 <Eye className="w-4 h-4" />
                 Quick View
               </button>
@@ -694,6 +719,7 @@ const ProductCard: React.FC<{
           <button className="p-2 rounded-full bg-white/90 text-gray-700 shadow-lg hover:scale-110 transition-transform">
             <Eye className="w-4 h-4" />
           </button>
+          onClick={onQuickView}
         </div>
 
         {/* Stock Status */}
