@@ -1,6 +1,6 @@
-# Harvinder Telecom - Digital Visiting Card
+#Digital Visiting Card
 
-A comprehensive, production-ready Digital Visiting Card website for Harvinder Telecom featuring real-time reviews, interactive animations, and modern web design.
+A comprehensive, production-ready Digital Visiting Card website  featuring real-time reviews, interactive animations, and modern web design.
 
 ## 🚀 Features
 
@@ -28,6 +28,21 @@ A comprehensive, production-ready Digital Visiting Card website for Harvinder Te
 - **Review Analytics** - Track review collection performance and conversion rates
 - **Accessibility Compliant** - WCAG 2.1 AA standards with keyboard navigation
 - **Cross-Browser Compatible** - Works on Chrome, Firefox, Safari, and Edge
+
+- Copyright (c) 2025 Shyamify Digitals
+
+All rights reserved.
+
+This project and its source code are the property of Shyamify Digitals.
+You may view and fork this repository for personal use or educational purposes, but you may not:
+
+- Use the code or designs for commercial purposes.
+- Redistribute, sublicense, or sell copies of the code or designs.
+- Claim the code, design, or concept as your own.
+
+For commercial licensing or collaboration inquiries, contact:
+[your email address or business contact page link]
+
 
 ## 🛠 Tech Stack
 
