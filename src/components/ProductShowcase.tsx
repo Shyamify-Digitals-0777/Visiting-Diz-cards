@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Smartphone, Headphones, Watch, Camera, Heart, Share2, MessageCircle, ChevronDown, ChevronUp } from 'lucide-react';
+import { Smartphone, Headphones, Watch, Camera, Heart, Share2, MessageCircle, ChevronDown, ChevronUp, Eye } from 'lucide-react';
+import ProductModal from './ProductModal';
 
 interface Product {
   id: number;
@@ -23,6 +24,8 @@ interface ProductShowcaseProps {
 const ProductShowcase: React.FC<ProductShowcaseProps> = ({ animationConfig, isDarkMode = false }) => {
   const [showAllProducts, setShowAllProducts] = useState(false);
   const [favorites, setFavorites] = useState<number[]>([]);
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const [showProductModal, setShowProductModal] = useState(false);
 
   const products: Product[] = [
     {
@@ -123,6 +126,16 @@ const ProductShowcase: React.FC<ProductShowcaseProps> = ({ animationConfig, isDa
     window.open(whatsappUrl, '_blank');
   };
 
+  const handleQuickView = (product: Product) => {
+    setSelectedProduct(product);
+    setShowProductModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setShowProductModal(false);
+    setSelectedProduct(null);
+  };
+
   const getCategoryIcon = (category: string) => {
     switch (category) {
       case 'Smartphones': return <Smartphone className="w-5 h-5" />;
@@ -170,6 +183,7 @@ const ProductShowcase: React.FC<ProductShowcaseProps> = ({ animationConfig, isDa
                   onToggleFavorite={() => toggleFavorite(product.id)}
                   onShare={() => handleShare(product)}
                   onContact={() => handleContact(product)}
+                  onQuickView={() => handleQuickView(product)}
                   getCategoryIcon={getCategoryIcon}
                 />
               ))}
@@ -219,6 +233,7 @@ const ProductShowcase: React.FC<ProductShowcaseProps> = ({ animationConfig, isDa
                   onToggleFavorite={() => toggleFavorite(product.id)}
                   onShare={() => handleShare(product)}
                   onContact={() => handleContact(product)}
+                  onQuickView={() => handleQuickView(product)}
                   getCategoryIcon={getCategoryIcon}
                 />
               </div>
@@ -226,6 +241,14 @@ const ProductShowcase: React.FC<ProductShowcaseProps> = ({ animationConfig, isDa
           </div>
         </div>
       </div>
+
+      {/* Product Modal */}
+      <ProductModal
+        isOpen={showProductModal}
+        onClose={handleCloseModal}
+        product={selectedProduct}
+        isDarkMode={isDarkMode}
+      />
     </section>
   );
 };
@@ -240,6 +263,7 @@ const ProductCard: React.FC<{
   onToggleFavorite: () => void;
   onShare: () => void;
   onContact: () => void;
+  onQuickView: () => void;
   getCategoryIcon: (category: string) => JSX.Element;
 }> = ({ 
   product, 
@@ -250,6 +274,7 @@ const ProductCard: React.FC<{
   onToggleFavorite, 
   onShare, 
   onContact, 
+  onQuickView,
   getCategoryIcon 
 }) => {
   return (
@@ -304,6 +329,15 @@ const ProductCard: React.FC<{
             className="p-2 rounded-full bg-white/90 text-gray-700 shadow-lg"
           >
             <Share2 className="w-4 h-4" />
+          </motion.button>
+          
+          <motion.button
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+            onClick={onQuickView}
+            className="p-2 rounded-full bg-white/90 text-gray-700 shadow-lg"
+          >
+            <Eye className="w-4 h-4" />
           </motion.button>
         </div>
 

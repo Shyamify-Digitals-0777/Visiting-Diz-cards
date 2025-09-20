@@ -1,19 +1,157 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { CreditCard, Percent, Clock, CheckCircle } from 'lucide-react';
+import { CreditCard, Percent, Clock, CheckCircle, FileText, Users } from 'lucide-react';
+import FinancePartnerModal from './FinancePartnerModal';
 
 interface FinancePartnersProps {
   animationConfig: any;
 }
 
 const FinancePartners: React.FC<FinancePartnersProps> = ({ animationConfig }) => {
+  const [selectedPartner, setSelectedPartner] = React.useState<any>(null);
+  const [showModal, setShowModal] = React.useState(false);
+
   const financePartners = [
-    { name: 'Bajaj Finserv', offer: '0% EMI up to 24 months', color: 'bg-blue-600' },
-    { name: 'HDFC Bank', offer: '12 months no cost EMI', color: 'bg-red-600' },
-    { name: 'ICICI Bank', offer: '18 months easy EMI', color: 'bg-orange-500' },
-    { name: 'SBI Cards', offer: '24 months flexible EMI', color: 'bg-blue-800' },
-    { name: 'Axis Bank', offer: '15 months 0% interest', color: 'bg-purple-600' },
-    { name: 'Kotak Bank', offer: '20 months easy payment', color: 'bg-red-500' }
+    { 
+      id: 'bajaj-finserv',
+      name: 'Bajaj Finserv', 
+      offer: '0% EMI up to 24 months', 
+      color: 'bg-blue-600',
+      logo: '/api/placeholder/100/50',
+      description: 'Leading financial services company offering flexible EMI solutions',
+      emiPlans: [
+        {
+          tenure: '6-12 Months',
+          interestRate: '0% - 12%',
+          processingFee: '₹199 - ₹999',
+          minAmount: '₹5,000',
+          maxAmount: '₹4,00,000',
+          features: ['Instant approval', 'No hidden charges', 'Flexible repayment']
+        },
+        {
+          tenure: '13-24 Months',
+          interestRate: '12% - 18%',
+          processingFee: '₹499 - ₹1,999',
+          minAmount: '₹10,000',
+          maxAmount: '₹5,00,000',
+          features: ['Extended tenure', 'Competitive rates', 'Easy documentation']
+        }
+      ],
+      eligibility: [
+        'Age: 21-65 years',
+        'Minimum monthly income: ₹15,000',
+        'Employment: Salaried or Self-employed',
+        'Credit score: 650 and above',
+        'Valid bank account and PAN card'
+      ],
+      documents: [
+        'PAN Card',
+        'Aadhaar Card',
+        'Salary slips (last 3 months)',
+        'Bank statements (last 6 months)',
+        'Employment certificate',
+        'Passport size photographs'
+      ],
+      process: [
+        {
+          step: 1,
+          title: 'Apply Online',
+          description: 'Fill the online application form with basic details',
+          icon: FileText
+        },
+        {
+          step: 2,
+          title: 'Document Verification',
+          description: 'Upload required documents for verification',
+          icon: CheckCircle
+        },
+        {
+          step: 3,
+          title: 'Approval',
+          description: 'Get instant approval based on eligibility',
+          icon: Users
+        },
+        {
+          step: 4,
+          title: 'Purchase',
+          description: 'Complete your purchase with EMI facility',
+          icon: CreditCard
+        }
+      ],
+      terms: [
+        'Interest rates are subject to change',
+        'Processing fees are non-refundable',
+        'Late payment charges may apply',
+        'Terms and conditions apply'
+      ],
+      applyUrl: 'https://www.bajajfinserv.in/apply-personal-loan-online',
+      learnMoreUrl: 'https://www.bajajfinserv.in/personal-loan'
+    },
+    { 
+      id: 'hdfc-bank',
+      name: 'HDFC Bank', 
+      offer: '12 months no cost EMI', 
+      color: 'bg-red-600',
+      logo: '/api/placeholder/100/50',
+      description: 'India\'s leading private sector bank with attractive EMI options',
+      emiPlans: [
+        {
+          tenure: '3-12 Months',
+          interestRate: '0% - 14%',
+          processingFee: '₹299 - ₹1,499',
+          minAmount: '₹3,000',
+          maxAmount: '₹3,00,000',
+          features: ['No cost EMI available', 'Quick processing', 'Reward points']
+        }
+      ],
+      eligibility: [
+        'Age: 21-60 years',
+        'Minimum monthly income: ₹20,000',
+        'HDFC Bank account holder (preferred)',
+        'Good credit history',
+        'Valid identity and address proof'
+      ],
+      documents: [
+        'PAN Card',
+        'Aadhaar Card',
+        'Income proof',
+        'Bank statements',
+        'Address proof'
+      ],
+      process: [
+        {
+          step: 1,
+          title: 'Check Eligibility',
+          description: 'Verify your eligibility for EMI facility',
+          icon: Users
+        },
+        {
+          step: 2,
+          title: 'Submit Application',
+          description: 'Complete the application with required documents',
+          icon: FileText
+        },
+        {
+          step: 3,
+          title: 'Instant Approval',
+          description: 'Get approval within minutes',
+          icon: CheckCircle
+        },
+        {
+          step: 4,
+          title: 'Shop & Pay',
+          description: 'Use your EMI facility for purchases',
+          icon: CreditCard
+        }
+      ],
+      terms: [
+        'Subject to bank\'s terms and conditions',
+        'Interest rates as per bank policy',
+        'Charges applicable as per schedule'
+      ],
+      applyUrl: 'https://www.hdfcbank.com/personal/pay/cards/credit-cards/instant-emi',
+      learnMoreUrl: 'https://www.hdfcbank.com/personal/pay/cards/credit-cards'
+    }
   ];
 
   const emiFeatures = [
@@ -22,6 +160,16 @@ const FinancePartners: React.FC<FinancePartnersProps> = ({ animationConfig }) =>
     { icon: CheckCircle, title: 'Easy Process', description: 'Simple documentation required' },
     { icon: CreditCard, title: 'Multiple Options', description: 'Various EMI tenure options' }
   ];
+
+  const handlePartnerClick = (partner: any) => {
+    setSelectedPartner(partner);
+    setShowModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+    setSelectedPartner(null);
+  };
 
   return (
     <section className="py-16 bg-gradient-to-br from-blue-50 to-green-50">
@@ -60,6 +208,7 @@ const FinancePartners: React.FC<FinancePartnersProps> = ({ animationConfig }) =>
                 transition: { duration: 0.3 }
               }}
               className={`${partner.color} rounded-xl md:rounded-2xl p-4 md:p-6 text-white relative overflow-hidden group cursor-pointer hover-lift min-h-[120px] md:min-h-[140px] flex flex-col justify-center`}
+              onClick={() => handlePartnerClick(partner)}
             >
               <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent"></div>
               <div className="relative z-10 text-center">
@@ -150,6 +299,13 @@ const FinancePartners: React.FC<FinancePartnersProps> = ({ animationConfig }) =>
             </div>
           </motion.div>
         </motion.div>
+
+        {/* Finance Partner Modal */}
+        <FinancePartnerModal
+          isOpen={showModal}
+          onClose={handleCloseModal}
+          partner={selectedPartner}
+        />
       </div>
     </section>
   );

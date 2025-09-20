@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Star, Heart, ShoppingCart, Plus, Minus, Truck, Shield, RotateCcw } from 'lucide-react';
+import { X, Star, Heart, ShoppingCart, Plus, Minus, Truck, Shield, RotateCcw, Eye } from 'lucide-react';
 
 interface Product {
   id: number;
@@ -37,6 +37,7 @@ const ProductModal: React.FC<ProductModalProps> = ({ isOpen, onClose, product, i
   const [quantity, setQuantity] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
   const [isFavorite, setIsFavorite] = useState(false);
+  const [isQuickView, setIsQuickView] = useState(false);
   const modalRef = useRef<HTMLDivElement>(null);
   const closeButtonRef = useRef<HTMLButtonElement>(null);
 
@@ -173,6 +174,9 @@ const ProductModal: React.FC<ProductModalProps> = ({ isOpen, onClose, product, i
           className={`${isDarkMode ? 'bg-gray-800' : 'bg-white'} rounded-2xl shadow-2xl max-w-6xl w-full max-h-[90vh] overflow-hidden`}
           onClick={(e) => e.stopPropagation()}
           onKeyDown={handleKeyDown}
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="product-modal-title"
         >
           {/* Header */}
           <div className={`flex items-center justify-between p-6 border-b ${isDarkMode ? 'border-gray-700' : 'border-gray-200'}`}>
@@ -187,7 +191,7 @@ const ProductModal: React.FC<ProductModalProps> = ({ isOpen, onClose, product, i
             <button
               ref={closeButtonRef}
               onClick={onClose}
-              className={`p-2 hover:bg-gray-100 ${isDarkMode ? 'hover:bg-gray-700' : ''} rounded-full transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500`}
+              className={`p-2 hover:bg-gray-100 ${isDarkMode ? 'hover:bg-gray-700' : ''} rounded-full transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2`}
               aria-label="Close product details"
             >
               <X className={`w-6 h-6 ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`} />
@@ -202,8 +206,9 @@ const ProductModal: React.FC<ProductModalProps> = ({ isOpen, onClose, product, i
               <div className={`${isDarkMode ? 'bg-gray-700' : 'bg-gray-100'} rounded-xl overflow-hidden aspect-square`}>
                 <img
                   src={productImages[selectedImage]}
-                  alt={`${product.name} - Image ${selectedImage + 1}`}
+                  alt={`${product.name} - Main product image`}
                   className="w-full h-full object-cover"
+                  loading="lazy"
                 />
               </div>
               
@@ -213,6 +218,7 @@ const ProductModal: React.FC<ProductModalProps> = ({ isOpen, onClose, product, i
                   <button
                     key={index}
                     onClick={() => setSelectedImage(index)}
+                    aria-label={`View image ${index + 1} of ${product.name}`}
                     className={`aspect-square rounded-lg overflow-hidden border-2 transition-all duration-200 ${
                       selectedImage === index 
                         ? 'border-blue-500 ring-2 ring-blue-200' 
@@ -361,6 +367,7 @@ const ProductModal: React.FC<ProductModalProps> = ({ isOpen, onClose, product, i
                   <button
                     onClick={() => setQuantity(Math.max(1, quantity - 1))}
                     className={`p-2 rounded-lg border ${isDarkMode ? 'border-gray-600 hover:bg-gray-700' : 'border-gray-300 hover:bg-gray-50'} transition-colors`}
+                    aria-label="Decrease quantity"
                   >
                     <Minus className="w-4 h-4" />
                   </button>
@@ -370,6 +377,7 @@ const ProductModal: React.FC<ProductModalProps> = ({ isOpen, onClose, product, i
                   <button
                     onClick={() => setQuantity(quantity + 1)}
                     className={`p-2 rounded-lg border ${isDarkMode ? 'border-gray-600 hover:bg-gray-700' : 'border-gray-300 hover:bg-gray-50'} transition-colors`}
+                    aria-label="Increase quantity"
                   >
                     <Plus className="w-4 h-4" />
                   </button>
