@@ -351,9 +351,9 @@ EMAIL_PASS=your-app-password
 EMAIL_SERVICE=gmail
 
 # Business Info
-BUSINESS_PHONE=+919876543210
-WHATSAPP_NUMBER=919876543210
-BUSINESS_EMAIL=info@harvinder-telecom.com
+BUSINESS_PHONE=+91790********
+WHATSAPP_NUMBER=91790********
+BUSINESS_EMAIL=info@mail.com
 
 # Google My Business Integration
 ## 🔄 Google My Business Integration Strategy
@@ -547,5 +547,5 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 ---
 
-**Made with ❤️ for Harvinder Telecom**  
+**Made with ❤️ for Shyamify Digitals**  
 *Your Trusted Mobile & Electronics Partner*
