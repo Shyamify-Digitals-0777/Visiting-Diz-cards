@@ -11,6 +11,7 @@ import FinancePartners from './components/FinancePartners';
 import ProductShowcase from './components/ProductShowcase';
 import ReviewsSection from './components/ReviewsSection';
 import Footer from './components/Footer';
+import QuickViewManager from './components/QuickViewManager';
 import './App.css';
 
 const animationConfig = {
@@ -105,6 +106,9 @@ function App() {
       <ProductShowcase animationConfig={animationConfig} isDarkMode={isDarkMode} />
       <ReviewsSection animationConfig={animationConfig} isDarkMode={isDarkMode} />
       <Footer animationConfig={animationConfig} />
+      
+      {/* Quick View Manager - handles all quick view functionality */}
+      <QuickViewManager isDarkMode={isDarkMode} />
     </div>
   );
 }

@@ -526,3 +526,111 @@ body {
 .theme-border {
   border-color: var(--border-color);
 }
+
+/* Quick View Button Styles */
+.quick-view-btn {
+  position: relative;
+  overflow: hidden;
+}
+
+.quick-view-btn::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: rgba(59, 130, 246, 0.2);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: width 0.3s ease, height 0.3s ease;
+}
+
+.quick-view-btn:hover::before {
+  width: 100%;
+  height: 100%;
+}
+
+.quick-view-btn:focus {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+/* Quick View Loading Animation */
+@keyframes quickViewPulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.quick-view-loading {
+  animation: quickViewPulse 1.5s ease-in-out infinite;
+}
+
+/* Quick View Modal Enhancements */
+.quick-view-modal {
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.quick-view-modal .modal-content {
+  max-height: 90vh;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e1 transparent;
+}
+
+.quick-view-modal .modal-content::-webkit-scrollbar {
+  width: 6px;
+}
+
+.quick-view-modal .modal-content::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.quick-view-modal .modal-content::-webkit-scrollbar-thumb {
+  background-color: #cbd5e1;
+  border-radius: 3px;
+}
+
+.quick-view-modal .modal-content::-webkit-scrollbar-thumb:hover {
+  background-color: #94a3b8;
+}
+
+/* Accessibility improvements */
+@media (prefers-reduced-motion: reduce) {
+  .quick-view-btn::before {
+    transition: none;
+  }
+  
+  .quick-view-loading {
+    animation: none;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .quick-view-btn {
+    border: 2px solid currentColor;
+  }
+  
+  .quick-view-btn:focus {
+    outline: 3px solid currentColor;
+    outline-offset: 2px;
+  }
+}
+
+/* Touch device optimizations */
+@media (hover: none) and (pointer: coarse) {
+  .quick-view-btn {
+    min-width: 44px;
+    min-height: 44px;
+  }
+  
+  .quick-view-btn::before {
+    display: none;
+  }
+}
