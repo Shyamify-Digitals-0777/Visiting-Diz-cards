@@ -527,13 +527,6 @@ axe http://localhost:5173
 - **Social Media Integration** - Connect social profiles
 - **Multi-language Support** - Internationalization
 
-## 📞 Support & Contact
-
-For support or customization requests:
-- **WhatsApp**: +91 98765 43210
-- **Email**: info@harvinder-telecom.com
-- **Address**: Shop No. 15, Main Market, Sector 22, Chandigarh
-
 ## 🎨 Design Credits
 
 - **Profile Badge Image**: Custom 3D rendered badge design
