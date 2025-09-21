@@ -1,0 +1,39 @@
+{
+  "name": "harvinder-telecom-admin",
+  "version": "1.0.0",
+  "description": "Admin Panel for Harvinder Telecom Digital Visiting Card",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "start": "node server/admin-server.js"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.57.4",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^6.20.1",
+    "framer-motion": "^11.0.24",
+    "lucide-react": "^0.344.0",
+    "recharts": "^2.8.0",
+    "react-hook-form": "^7.48.2",
+    "react-hot-toast": "^2.4.1",
+    "date-fns": "^2.30.0",
+    "axios": "^1.6.7",
+    "js-cookie": "^3.0.5",
+    "react-table": "^7.8.0",
+    "react-dropzone": "^14.2.3"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.5",
+    "@types/react-dom": "^18.3.0",
+    "@types/js-cookie": "^3.0.6",
+    "@vitejs/plugin-react": "^4.3.1",
+    "autoprefixer": "^10.4.18",
+    "postcss": "^8.4.35",
+    "tailwindcss": "^3.4.1",
+    "typescript": "^5.5.3",
+    "vite": "^5.4.2"
+  }
+}

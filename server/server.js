@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import adminRoutes from './admin-routes.js';
 import EmailService from './emailService.js';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -21,6 +22,8 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname, '..', 'dist')));
 
 // API Routes
+app.use('/api/admin', adminRoutes);
+
 app.post('/api/send-review-reminder', async (req, res) => {
   try {
     const { email, customerName, businessName, reviewLink } = req.body;
