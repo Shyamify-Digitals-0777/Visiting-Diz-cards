@@ -37,9 +37,10 @@ const ProductModal: React.FC<ProductModalProps> = ({ isOpen, onClose, product, i
   const [quantity, setQuantity] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
   const [isFavorite, setIsFavorite] = useState(false);
-  const [isQuickView, setIsQuickView] = useState(false);
   const modalRef = useRef<HTMLDivElement>(null);
   const closeButtonRef = useRef<HTMLButtonElement>(null);
+  const [imageLoading, setImageLoading] = useState(true);
+  const [imageError, setImageError] = useState(false);
 
   // Sample additional data for demonstration
   const productImages = product?.images || [
@@ -88,6 +89,17 @@ const ProductModal: React.FC<ProductModalProps> = ({ isOpen, onClose, product, i
       setIsLoading(false);
     }
   }, [product]);
+
+  // Handle image loading states
+  const handleImageLoad = () => {
+    setImageLoading(false);
+    setImageError(false);
+  };
+
+  const handleImageError = () => {
+    setImageLoading(false);
+    setImageError(true);
+  };
 
   // Handle outside click
   const handleBackdropClick = (e: React.MouseEvent) => {
@@ -203,17 +215,34 @@ const ProductModal: React.FC<ProductModalProps> = ({ isOpen, onClose, product, i
             {/* Product Images */}
             <div className="space-y-4">
               {/* Main Image */}
-              <div className={`${isDarkMode ? 'bg-gray-700' : 'bg-gray-100'} rounded-xl overflow-hidden aspect-square`}>
+              <div className={`${isDarkMode ? 'bg-gray-700' : 'bg-gray-100'} rounded-xl overflow-hidden aspect-square relative`}>
+                {imageLoading && (
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+                  </div>
+                )}
+                {imageError ? (
+                  <div className="w-full h-full flex items-center justify-center text-gray-400">
+                    <div className="text-center">
+                      <div className="text-4xl mb-2">📷</div>
+                      <p className="text-sm">Image not available</p>
+                    </div>
+                  </div>
+                ) : (
                 <img
                   src={productImages[selectedImage]}
                   alt={`${product.name} - Main product image`}
-                  className="w-full h-full object-cover"
+                  className={`w-full h-full object-cover transition-opacity duration-300 ${imageLoading ? 'opacity-0' : 'opacity-100'}`}
                   loading="lazy"
+                  onLoad={handleImageLoad}
+                  onError={handleImageError}
                 />
+                )}
               </div>
               
               {/* Thumbnail Images */}
-              <div className="grid grid-cols-4 gap-2">
+              {productImages.length > 1 && (
+                <div className="grid grid-cols-4 gap-2">
                 {productImages.map((image, index) => (
                   <button
                     key={index}
@@ -232,8 +261,9 @@ const ProductModal: React.FC<ProductModalProps> = ({ isOpen, onClose, product, i
                     />
                   </button>
                 ))}
+                </div>
+                )}
               </div>
-            </div>
 
             {/* Product Information */}
             <div className="space-y-6">
@@ -385,15 +415,27 @@ const ProductModal: React.FC<ProductModalProps> = ({ isOpen, onClose, product, i
               </div>
 
               {/* Stock Status */}
-              <div className={`p-4 rounded-lg ${product.inStock ? 'bg-green-50 border border-green-200' : 'bg-red-50 border border-red-200'}`}>
+              <div className={`p-4 rounded-lg ${
+                product.inStock 
+                  ? isDarkMode ? 'bg-green-900/20 border border-green-700' : 'bg-green-50 border border-green-200'
+                  : isDarkMode ? 'bg-red-900/20 border border-red-700' : 'bg-red-50 border border-red-200'
+              }`}>
                 <div className="flex items-center gap-2">
                   <div className={`w-3 h-3 rounded-full ${product.inStock ? 'bg-green-500' : 'bg-red-500'}`} />
-                  <span className={`font-semibold ${product.inStock ? 'text-green-800' : 'text-red-800'}`}>
+                  <span className={`font-semibold ${
+                    product.inStock 
+                      ? isDarkMode ? 'text-green-400' : 'text-green-800'
+                      : isDarkMode ? 'text-red-400' : 'text-red-800'
+                  }`}>
                     {product.inStock ? 'In Stock' : 'Out of Stock'}
                   </span>
                 </div>
                 {product.stockCount && (
-                  <p className={`text-sm mt-1 ${product.inStock ? 'text-green-700' : 'text-red-700'}`}>
+                  <p className={`text-sm mt-1 ${
+                    product.inStock 
+                      ? isDarkMode ? 'text-green-300' : 'text-green-700'
+                      : isDarkMode ? 'text-red-300' : 'text-red-700'
+                  }`}>
                     {product.stockCount} units available
                   </p>
                 )}
@@ -430,7 +472,7 @@ const ProductModal: React.FC<ProductModalProps> = ({ isOpen, onClose, product, i
               </div>
 
               {/* Additional Info */}
-              <div className={`grid grid-cols-3 gap-4 pt-4 border-t ${isDarkMode ? 'border-gray-700' : 'border-gray-200'}`}>
+              <div className={`grid grid-cols-3 gap-4 pt-6 border-t ${isDarkMode ? 'border-gray-700' : 'border-gray-200'}`}>
                 <div className="text-center">
                   <Truck className={`w-6 h-6 mx-auto mb-2 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`} />
                   <p className={`text-sm font-medium ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>Free Delivery</p>
@@ -445,6 +487,39 @@ const ProductModal: React.FC<ProductModalProps> = ({ isOpen, onClose, product, i
                   <RotateCcw className={`w-6 h-6 mx-auto mb-2 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`} />
                   <p className={`text-sm font-medium ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>Returns</p>
                   <p className={`text-xs ${isDarkMode ? 'text-gray-500' : 'text-gray-500'}`}>7 days</p>
+                </div>
+              </div>
+
+              {/* Enhanced Product Specifications */}
+              <div className={`mt-6 p-4 rounded-lg ${isDarkMode ? 'bg-gray-700' : 'bg-gray-50'}`}>
+                <h4 className={`font-semibold ${isDarkMode ? 'text-white' : 'text-gray-900'} mb-3`}>
+                  Product Highlights
+                </h4>
+                <div className="grid grid-cols-2 gap-3 text-sm">
+                  <div className="flex items-center gap-2">
+                    <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                    <span className={isDarkMode ? 'text-gray-300' : 'text-gray-600'}>
+                      Brand: {product.brand}
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                    <span className={isDarkMode ? 'text-gray-300' : 'text-gray-600'}>
+                      Category: {product.category}
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div className="w-2 h-2 bg-yellow-500 rounded-full"></div>
+                    <span className={isDarkMode ? 'text-gray-300' : 'text-gray-600'}>
+                      Rating: {product.rating}/5
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
+                    <span className={isDarkMode ? 'text-gray-300' : 'text-gray-600'}>
+                      Reviews: {product.reviews}
+                    </span>
+                  </div>
                 </div>
               </div>
             </div>
