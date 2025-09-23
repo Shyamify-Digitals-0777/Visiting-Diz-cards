@@ -531,6 +531,7 @@ body {
 .quick-view-btn {
   position: relative;
   overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .quick-view-btn::before {
@@ -554,6 +555,16 @@ body {
 .quick-view-btn:focus {
   outline: 2px solid #3b82f6;
   outline-offset: 2px;
+}
+
+/* Enhanced Quick View Animations */
+.quick-view-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+.quick-view-btn:active {
+  transform: translateY(0);
 }
 
 /* Quick View Loading Animation */
@@ -600,6 +611,84 @@ body {
   background-color: #94a3b8;
 }
 
+/* Latest Products Animations */
+.latest-product-card {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.latest-product-card:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+}
+
+/* Featured Products Enhancements */
+.featured-product-card {
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.featured-product-card:hover {
+  transform: translateY(-12px) scale(1.03);
+  box-shadow: 0 35px 60px -12px rgba(0, 0, 0, 0.3);
+}
+
+/* Badge Animations */
+@keyframes badgeGlow {
+  0%, 100% {
+    box-shadow: 0 0 5px rgba(59, 130, 246, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(59, 130, 246, 0.8);
+  }
+}
+
+.badge-glow {
+  animation: badgeGlow 2s ease-in-out infinite;
+}
+
+/* Countdown Timer Styles */
+.countdown-timer {
+  background: linear-gradient(45deg, #ef4444, #f97316);
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
+/* Enhanced Image Loading */
+.product-image-container {
+  position: relative;
+  overflow: hidden;
+}
+
+.product-image-loading {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: loading 1.5s infinite;
+}
+
+/* Swiper Custom Styles for Featured Products */
+.featured-slideshow .swiper-slide {
+  transition: all 0.3s ease;
+}
+
+.featured-slideshow .swiper-slide:not(.swiper-slide-active) {
+  opacity: 0.7;
+  transform: scale(0.95);
+}
+
+.featured-slideshow .swiper-slide-active {
+  opacity: 1;
+  transform: scale(1);
+}
+
 /* Accessibility improvements */
 @media (prefers-reduced-motion: reduce) {
   .quick-view-btn::before {
@@ -628,9 +717,15 @@ body {
   .quick-view-btn {
     min-width: 44px;
     min-height: 44px;
+    padding: 12px;
   }
   
   .quick-view-btn::before {
     display: none;
+  }
+  
+  .latest-product-card:hover,
+  .featured-product-card:hover {
+    transform: none;
   }
 }
