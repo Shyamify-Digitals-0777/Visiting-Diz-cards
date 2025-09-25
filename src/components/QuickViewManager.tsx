@@ -284,7 +284,6 @@ const QuickViewManager: React.FC<QuickViewManagerProps> = ({ isDarkMode = false 
                 </p>
               )}
             </div>
-          </div>
         </motion.div>
       )}
 
