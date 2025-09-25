@@ -9,6 +9,7 @@ import Reviews from './pages/Reviews';
 import Users from './pages/Users';
 import Analytics from './pages/Analytics';
 import Settings from './pages/Settings';
+import PopupManager from './pages/PopupManager';
 import LoadingSpinner from './components/LoadingSpinner';
 
 function App() {
@@ -41,6 +42,7 @@ function App() {
         <Route path="/users" element={<Users />} />
         <Route path="/analytics" element={<Analytics />} />
         <Route path="/settings" element={<Settings />} />
+        <Route path="/popups" element={<PopupManager />} />
         <Route path="/login" element={<Navigate to="/dashboard" replace />} />
         <Route path="*" element={<Navigate to="/dashboard" replace />} />
       </Routes>

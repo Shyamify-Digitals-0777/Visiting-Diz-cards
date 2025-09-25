@@ -5,7 +5,6 @@ import HeroSection from './components/HeroSection';
 import ContactBar from './components/ContactBar';
 import BusinessInfo from './components/BusinessInfo';
 import FeaturedSlideshow from './components/FeaturedSlideshow';
-import LatestProducts from './components/LatestProducts';
 import FeaturedProducts from './components/FeaturedProducts';
 import ProductGallery from './components/ProductGallery';
 import BrandPartners from './components/BrandPartners';
@@ -14,6 +13,7 @@ import ProductShowcase from './components/ProductShowcase';
 import ReviewsSection from './components/ReviewsSection';
 import Footer from './components/Footer';
 import QuickViewManager from './components/QuickViewManager';
+import PopupNotification from './components/PopupNotification';
 import './App.css';
 
 const animationConfig = {
@@ -102,7 +102,6 @@ function App() {
       <ContactBar animationConfig={animationConfig} />
       <BusinessInfo animationConfig={animationConfig} />
       <FeaturedSlideshow animationConfig={animationConfig} isDarkMode={isDarkMode} />
-      <LatestProducts animationConfig={animationConfig} isDarkMode={isDarkMode} />
       <FeaturedProducts animationConfig={animationConfig} isDarkMode={isDarkMode} />
       <ProductGallery animationConfig={animationConfig} isDarkMode={isDarkMode} />
       <BrandPartners animationConfig={animationConfig} />
@@ -113,6 +112,9 @@ function App() {
       
       {/* Quick View Manager - handles all quick view functionality */}
       <QuickViewManager isDarkMode={isDarkMode} />
+      
+      {/* Popup Notification System */}
+      <PopupNotification isDarkMode={isDarkMode} />
     </div>
   );
 }

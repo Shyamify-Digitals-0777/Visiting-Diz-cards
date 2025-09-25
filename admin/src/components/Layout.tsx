@@ -13,6 +13,7 @@ import {
   X,
   Bell,
   Search,
+  Gift,
 } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import toast from 'react-hot-toast';
@@ -32,6 +33,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     { name: 'Reviews', href: '/reviews', icon: MessageSquare },
     { name: 'Users', href: '/users', icon: Users },
     { name: 'Analytics', href: '/analytics', icon: BarChart3 },
+    { name: 'Popups', href: '/popups', icon: Gift },
     { name: 'Settings', href: '/settings', icon: Settings },
   ];
 
