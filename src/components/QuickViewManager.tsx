@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Eye, AlertCircle, Loader2 } from 'lucide-react';
+import { Eye, AlertCircle, Loader2, X } from 'lucide-react';
+import { motion } from 'framer-motion';
 import ProductModal from './ProductModal';
 import { validateProductData, extractProductId, trackQuickViewEvent, QuickViewError } from '../utils/quickViewUtils';
 
@@ -284,6 +285,7 @@ const QuickViewManager: React.FC<QuickViewManagerProps> = ({ isDarkMode = false 
                 </p>
               )}
             </div>
+          </motion.div>
         </motion.div>
       )}
 
