@@ -1,19 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import {
-  Plus,
-  Search,
-  Edit,
-  Trash2,
-  Eye,
-  EyeOff,
-  Gift,
-  Calendar,
-  Users,
-  BarChart3,
-  X,
-  Save,
-} from 'lucide-react';
+import { Plus, Search, CreditCard as Edit, Trash2, Eye, EyeOff, Gift, Calendar, Users, BarChart3, X, Save } from 'lucide-react';
 import { supabase, PopupOffer } from '../lib/supabase';
 import LoadingSpinner from '../components/LoadingSpinner';
 import toast from 'react-hot-toast';
