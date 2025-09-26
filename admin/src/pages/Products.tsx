@@ -15,6 +15,7 @@ import {
 import { supabase, Product } from '../lib/supabase';
 import LoadingSpinner from '../components/LoadingSpinner';
 import toast from 'react-hot-toast';
+import { AdminAPI } from '../lib/api';
 
 const Products: React.FC = () => {
   const [products, setProducts] = useState<Product[]>([]);
@@ -90,16 +91,17 @@ const Products: React.FC = () => {
   const fetchProducts = async () => {
     try {
       setLoading(true);
-      // In a real implementation, fetch from Supabase
-      // const { data, error } = await supabase.from('products').select('*');
-      // if (error) throw error;
-      // setProducts(data || []);
+      const result = await AdminAPI.getProducts({
+        search: searchTerm,
+        category: selectedCategory === 'all' ? undefined : selectedCategory
+      });
       
-      // Using mock data for demonstration
-      setProducts(mockProducts);
+      setProducts(result.products);
     } catch (error) {
       console.error('Error fetching products:', error);
       toast.error('Failed to fetch products');
+      // Fallback to mock data
+      setProducts(mockProducts);
     } finally {
       setLoading(false);
     }
@@ -109,9 +111,7 @@ const Products: React.FC = () => {
     if (!confirm('Are you sure you want to delete this product?')) return;
 
     try {
-      // In a real implementation:
-      // const { error } = await supabase.from('products').delete().eq('id', id);
-      // if (error) throw error;
+      await AdminAPI.deleteProduct(id);
       
       setProducts(products.filter(p => p.id !== id));
       toast.success('Product deleted successfully');
@@ -125,9 +125,7 @@ const Products: React.FC = () => {
     if (!confirm(`Are you sure you want to delete ${selectedProducts.length} products?`)) return;
 
     try {
-      // In a real implementation:
-      // const { error } = await supabase.from('products').delete().in('id', selectedProducts);
-      // if (error) throw error;
+      await Promise.all(selectedProducts.map(id => AdminAPI.deleteProduct(id)));
       
       setProducts(products.filter(p => !selectedProducts.includes(p.id)));
       setSelectedProducts([]);

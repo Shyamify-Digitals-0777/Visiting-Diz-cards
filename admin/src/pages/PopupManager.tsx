@@ -5,6 +5,7 @@ import { supabase, PopupOffer } from '../lib/supabase';
 import LoadingSpinner from '../components/LoadingSpinner';
 import toast from 'react-hot-toast';
 import { format } from 'date-fns';
+import { AdminAPI } from '../lib/api';
 
 const PopupManager: React.FC = () => {
   const [popups, setPopups] = useState<PopupOffer[]>([]);
@@ -79,15 +80,14 @@ const PopupManager: React.FC = () => {
   const fetchPopups = async () => {
     try {
       setLoading(true);
-      // In a real implementation:
-      // const { data, error } = await supabase.from('popup_offers').select('*').order('created_at', { ascending: false });
-      // if (error) throw error;
-      // setPopups(data || []);
+      const data = await AdminAPI.getPopupOffers();
       
-      setPopups(mockPopups);
+      setPopups(data);
     } catch (error) {
       console.error('Error fetching popups:', error);
       toast.error('Failed to fetch popup offers');
+      // Fallback to mock data
+      setPopups(mockPopups);
     } finally {
       setLoading(false);
     }
@@ -95,12 +95,7 @@ const PopupManager: React.FC = () => {
 
   const handleToggleActive = async (popupId: string, isActive: boolean) => {
     try {
-      // In a real implementation:
-      // const { error } = await supabase
-      //   .from('popup_offers')
-      //   .update({ is_active: isActive, updated_at: new Date().toISOString() })
-      //   .eq('id', popupId);
-      // if (error) throw error;
+      await AdminAPI.updatePopupOffer(popupId, { is_active: isActive });
 
       setPopups(popups.map(popup => 
         popup.id === popupId 
@@ -119,9 +114,7 @@ const PopupManager: React.FC = () => {
     if (!confirm('Are you sure you want to delete this popup offer?')) return;
 
     try {
-      // In a real implementation:
-      // const { error } = await supabase.from('popup_offers').delete().eq('id', popupId);
-      // if (error) throw error;
+      await AdminAPI.deletePopupOffer(popupId);
 
       setPopups(popups.filter(popup => popup.id !== popupId));
       toast.success('Popup deleted successfully');

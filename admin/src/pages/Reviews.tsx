@@ -16,6 +16,7 @@ import { supabase, Review } from '../lib/supabase';
 import LoadingSpinner from '../components/LoadingSpinner';
 import toast from 'react-hot-toast';
 import { format } from 'date-fns';
+import { AdminAPI } from '../lib/api';
 
 const Reviews: React.FC = () => {
   const [reviews, setReviews] = useState<Review[]>([]);
@@ -79,15 +80,17 @@ const Reviews: React.FC = () => {
   const fetchReviews = async () => {
     try {
       setLoading(true);
-      // In a real implementation:
-      // const { data, error } = await supabase.from('reviews').select('*').order('created_at', { ascending: false });
-      // if (error) throw error;
-      // setReviews(data || []);
+      const result = await AdminAPI.getReviews({
+        status: statusFilter === 'all' ? undefined : statusFilter,
+        search: searchTerm
+      });
       
-      setReviews(mockReviews);
+      setReviews(result.reviews);
     } catch (error) {
       console.error('Error fetching reviews:', error);
       toast.error('Failed to fetch reviews');
+      // Fallback to mock data
+      setReviews(mockReviews);
     } finally {
       setLoading(false);
     }
@@ -95,12 +98,7 @@ const Reviews: React.FC = () => {
 
   const handleStatusChange = async (reviewId: number, newStatus: 'approved' | 'rejected') => {
     try {
-      // In a real implementation:
-      // const { error } = await supabase
-      //   .from('reviews')
-      //   .update({ status: newStatus, updated_at: new Date().toISOString() })
-      //   .eq('id', reviewId);
-      // if (error) throw error;
+      await AdminAPI.updateReviewStatus(reviewId, newStatus);
 
       setReviews(reviews.map(review => 
         review.id === reviewId 
@@ -144,9 +142,7 @@ const Reviews: React.FC = () => {
     if (!confirm('Are you sure you want to delete this review?')) return;
 
     try {
-      // In a real implementation:
-      // const { error } = await supabase.from('reviews').delete().eq('id', reviewId);
-      // if (error) throw error;
+      await AdminAPI.deleteReview(reviewId);
 
       setReviews(reviews.filter(review => review.id !== reviewId));
       toast.success('Review deleted successfully');
