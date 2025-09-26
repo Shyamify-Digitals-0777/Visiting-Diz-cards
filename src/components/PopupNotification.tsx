@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Gift, Percent, Clock, Star, ShoppingCart, ExternalLink } from 'lucide-react';
-import { supabase } from '../lib/supabase';
+import { useAdminData } from '../hooks/useAdminData';
+import { AdminSyncService } from '../lib/adminSync';
 
 interface PopupOffer {
   id: string;
@@ -30,6 +31,12 @@ const PopupNotification: React.FC<PopupNotificationProps> = ({ isDarkMode = fals
   const [currentOffer, setCurrentOffer] = useState<PopupOffer | null>(null);
   const [showPopup, setShowPopup] = useState(false);
   const [timeLeft, setTimeLeft] = useState<string>('');
+
+  // Use admin data hook to get real-time popup offers
+  const { data: adminOffers, loading: offersLoading } = useAdminData(
+    'popup_offers',
+    AdminSyncService.fetchPopupOffers
+  );
 
   // Sample popup offers - in production, these would come from admin panel
   const sampleOffers: PopupOffer[] = [
@@ -87,29 +94,21 @@ const PopupNotification: React.FC<PopupNotificationProps> = ({ isDarkMode = fals
   useEffect(() => {
     const loadPopupSettings = async () => {
       try {
-        // In production, fetch from Supabase
-        // const { data, error } = await supabase
-        //   .from('popup_offers')
-        //   .select('*')
-        //   .eq('is_active', true)
-        //   .order('created_at', { ascending: false })
-        //   .limit(1)
-        //   .single();
-
-        // For now, use sample data
-        const activeOffer = sampleOffers.find(offer => offer.isActive && offer.showOnLoad);
+        // Use admin offers if available, otherwise fallback to sample data
+        const offers = adminOffers && adminOffers.length > 0 ? adminOffers : sampleOffers;
+        const activeOffer = offers.find(offer => offer.is_active && offer.show_on_load);
         
         if (activeOffer) {
           // Check if user has seen this popup before
           const viewCount = getPopupViewCount(activeOffer.id);
           
-          if (viewCount < activeOffer.maxShowsPerUser) {
+          if (viewCount < activeOffer.max_shows_per_user) {
             // Show popup after delay
             setTimeout(() => {
               setCurrentOffer(activeOffer);
               setShowPopup(true);
               incrementPopupViewCount(activeOffer.id);
-            }, activeOffer.delaySeconds * 1000);
+            }, activeOffer.delay_seconds * 1000);
           }
         }
       } catch (error) {
@@ -118,7 +117,7 @@ const PopupNotification: React.FC<PopupNotificationProps> = ({ isDarkMode = fals
     };
 
     loadPopupSettings();
-  }, []);
+  }, [adminOffers]);
 
   // Countdown timer for expiry
   useEffect(() => {

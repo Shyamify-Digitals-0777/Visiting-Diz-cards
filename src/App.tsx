@@ -14,6 +14,7 @@ import ReviewsSection from './components/ReviewsSection';
 import Footer from './components/Footer';
 import QuickViewManager from './components/QuickViewManager';
 import PopupNotification from './components/PopupNotification';
+import { AdminSyncService } from './lib/adminSync';
 import './App.css';
 
 const animationConfig = {
@@ -27,6 +28,11 @@ const animationConfig = {
 function App() {
   const [isLoading, setIsLoading] = useState(true);
   const [isDarkMode, setIsDarkMode] = useState(false);
+
+  useEffect(() => {
+    // Initialize admin sync service for real-time updates
+    AdminSyncService.init();
+  }, []);
 
   useEffect(() => {
     // Check for saved theme preference or default to system preference

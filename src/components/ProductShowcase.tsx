@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Smartphone, Headphones, Watch, Camera, Heart, Share2, MessageCircle, ChevronDown, ChevronUp, Eye } from 'lucide-react';
 import ProductModal from './ProductModal';
+import { useAdminData } from '../hooks/useAdminData';
+import { AdminSyncService } from '../lib/adminSync';
 
 interface Product {
   id: number;
@@ -27,6 +29,13 @@ const ProductShowcase: React.FC<ProductShowcaseProps> = ({ animationConfig, isDa
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [showProductModal, setShowProductModal] = useState(false);
 
+  // Use admin data hook to get real-time product updates
+  const { data: adminProducts, loading: productsLoading } = useAdminData(
+    'products',
+    AdminSyncService.fetchProducts
+  );
+
+  // Fallback products if admin data is not available
   const products: Product[] = [
     {
       id: 1,

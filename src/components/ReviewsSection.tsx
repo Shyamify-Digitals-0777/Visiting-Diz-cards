@@ -4,6 +4,8 @@ import { Star, MessageCircle, Copy, Send, User, ExternalLink, CheckCircle, Mail,
 import axios from 'axios';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination, Autoplay } from 'swiper/modules';
+import { useAdminData } from '../hooks/useAdminData';
+import { AdminSyncService } from '../lib/adminSync';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
@@ -41,6 +43,12 @@ const ReviewsSection: React.FC<ReviewsSectionProps> = ({ animationConfig, isDark
   const [copySuccess, setCopySuccess] = useState(false);
   const [customerEmail, setCustomerEmail] = useState('');
 
+  // Use admin data hook to get real-time review updates
+  const { data: adminReviews, loading: reviewsLoading } = useAdminData(
+    'reviews',
+    AdminSyncService.fetchReviews
+  );
+
   // Mock reviews data (replace with API call in production)
   const mockReviews: Review[] = [
     {
@@ -72,6 +80,28 @@ const ReviewsSection: React.FC<ReviewsSectionProps> = ({ animationConfig, isDark
   useEffect(() => {
     fetchReviews();
   }, []);
+
+  // Update reviews when admin data changes
+  useEffect(() => {
+    if (adminReviews && adminReviews.length > 0) {
+      // Merge admin reviews with local reviews
+      const storedReviews = localStorage.getItem('harvinder-telecom-reviews');
+      let userReviews: Review[] = [];
+      
+      if (storedReviews) {
+        try {
+          userReviews = JSON.parse(storedReviews);
+        } catch (error) {
+          console.error('Error parsing stored reviews:', error);
+          userReviews = [];
+        }
+      }
+      
+      // Combine user reviews with admin-approved reviews
+      const allReviews = [...userReviews, ...adminReviews];
+      setReviews(allReviews);
+    }
+  }, [adminReviews]);
 
   // Load reviews from localStorage and merge with mock data
   const fetchReviews = async () => {
