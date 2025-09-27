@@ -11,16 +11,16 @@ interface Product {
   images?: string[];
   category: string;
   rating: number;
-  reviews: number;
+  reviews_count: number;
   features: string[];
-  inStock: boolean;
+  in_stock: boolean;
   isNew?: boolean;
   discount?: string;
   brand: string;
   description?: string;
   sizes?: string[];
   colors?: string[];
-  stockCount?: number;
+  stock_count?: number;
 }
 
 interface ProductModalProps {
@@ -296,7 +296,7 @@ const ProductModal: React.FC<ProductModalProps> = ({ isOpen, onClose, product, i
                     {product.rating}
                   </span>
                   <span className={`${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-                    ({product.reviews} reviews)
+                    Reviews: {product.reviews_count}
                   </span>
                 </div>
               </div>
@@ -307,7 +307,7 @@ const ProductModal: React.FC<ProductModalProps> = ({ isOpen, onClose, product, i
                   {product.price}
                 </span>
                 {product.originalPrice && (
-                  <span className={`text-xl ${isDarkMode ? 'text-gray-500' : 'text-gray-400'} line-through`}>
+                  ({product.reviews_count} reviews)
                     {product.originalPrice}
                   </span>
                 )}
@@ -416,27 +416,27 @@ const ProductModal: React.FC<ProductModalProps> = ({ isOpen, onClose, product, i
 
               {/* Stock Status */}
               <div className={`p-4 rounded-lg ${
-                product.inStock 
+                product.in_stock 
                   ? isDarkMode ? 'bg-green-900/20 border border-green-700' : 'bg-green-50 border border-green-200'
                   : isDarkMode ? 'bg-red-900/20 border border-red-700' : 'bg-red-50 border border-red-200'
               }`}>
                 <div className="flex items-center gap-2">
-                  <div className={`w-3 h-3 rounded-full ${product.inStock ? 'bg-green-500' : 'bg-red-500'}`} />
+                  <div className={`w-3 h-3 rounded-full ${product.in_stock ? 'bg-green-500' : 'bg-red-500'}`} />
                   <span className={`font-semibold ${
-                    product.inStock 
+                    product.in_stock 
                       ? isDarkMode ? 'text-green-400' : 'text-green-800'
                       : isDarkMode ? 'text-red-400' : 'text-red-800'
                   }`}>
-                    {product.inStock ? 'In Stock' : 'Out of Stock'}
+                    {product.in_stock ? 'In Stock' : 'Out of Stock'}
                   </span>
                 </div>
-                {product.stockCount && (
+                {product.stock_count && (
                   <p className={`text-sm mt-1 ${
-                    product.inStock 
+                    product.in_stock 
                       ? isDarkMode ? 'text-green-300' : 'text-green-700'
                       : isDarkMode ? 'text-red-300' : 'text-red-700'
                   }`}>
-                    {product.stockCount} units available
+                    {product.stock_count} units available
                   </p>
                 )}
               </div>
@@ -445,7 +445,7 @@ const ProductModal: React.FC<ProductModalProps> = ({ isOpen, onClose, product, i
               <div className="space-y-3">
                 <button
                   onClick={handleAddToCart}
-                  disabled={!product.inStock || isLoading}
+                  disabled={!product.in_stock || isLoading}
                   className="w-full flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white py-4 px-6 rounded-xl font-semibold transition-all duration-300 shadow-lg hover:shadow-xl"
                 >
                   {isLoading ? (

@@ -3,6 +3,7 @@ import { Eye, AlertCircle, Loader2, X } from 'lucide-react';
 import { motion } from 'framer-motion';
 import ProductModal from './ProductModal';
 import { validateProductData, extractProductId, trackQuickViewEvent, QuickViewError } from '../utils/quickViewUtils';
+import { useAdminData } from '../hooks/useAdminData';
 
 interface Product {
   id: number;
@@ -13,16 +14,16 @@ interface Product {
   images?: string[];
   category: string;
   rating: number;
-  reviews: number;
+  reviews_count: number;
   features: string[];
-  inStock: boolean;
+  in_stock: boolean;
   isNew?: boolean;
   discount?: string;
   brand: string;
   description?: string;
   sizes?: string[];
   colors?: string[];
-  stockCount?: number;
+  stock_count?: number;
 }
 
 interface QuickViewManagerProps {
@@ -36,75 +37,9 @@ const QuickViewManager: React.FC<QuickViewManagerProps> = ({ isDarkMode = false 
   const [error, setError] = useState<string | null>(null);
   const [retryAttempts, setRetryAttempts] = useState(0);
   const maxRetryAttempts = 3;
-
-  // Sample product database - in production, this would come from an API
-  const productDatabase: Record<number, Product> = {
-    1: {
-      id: 1,
-      name: "iPhone 15 Pro Max",
-      price: "₹1,59,900",
-      originalPrice: "₹1,69,900",
-      image: "https://images.pexels.com/photos/788946/pexels-photo-788946.jpeg?auto=compress&cs=tinysrgb&w=500",
-      images: [
-        "https://images.pexels.com/photos/788946/pexels-photo-788946.jpeg?auto=compress&cs=tinysrgb&w=500",
-        "https://images.pexels.com/photos/404280/pexels-photo-404280.jpeg?auto=compress&cs=tinysrgb&w=500",
-        "https://images.pexels.com/photos/1092644/pexels-photo-1092644.jpeg?auto=compress&cs=tinysrgb&w=500"
-      ],
-      category: "Smartphones",
-      rating: 4.8,
-      reviews: 1247,
-      features: ["A17 Pro Chip", "Titanium Design", "48MP Camera", "Action Button"],
-      inStock: true,
-      isNew: true,
-      discount: "6% OFF",
-      brand: "Apple",
-      description: "The ultimate iPhone with titanium design, A17 Pro chip, and revolutionary camera system for professional photography.",
-      sizes: ["128GB", "256GB", "512GB", "1TB"],
-      colors: ["Natural Titanium", "Blue Titanium", "White Titanium", "Black Titanium"],
-      stockCount: 15
-    },
-    2: {
-      id: 2,
-      name: "Samsung Galaxy S24 Ultra",
-      price: "₹1,24,999",
-      originalPrice: "₹1,34,999",
-      image: "https://images.pexels.com/photos/404280/pexels-photo-404280.jpeg?auto=compress&cs=tinysrgb&w=500",
-      images: [
-        "https://images.pexels.com/photos/404280/pexels-photo-404280.jpeg?auto=compress&cs=tinysrgb&w=500",
-        "https://images.pexels.com/photos/788946/pexels-photo-788946.jpeg?auto=compress&cs=tinysrgb&w=500"
-      ],
-      category: "Smartphones",
-      rating: 4.7,
-      reviews: 892,
-      features: ["200MP Camera", "S Pen", "5000mAh Battery", "Galaxy AI"],
-      inStock: true,
-      isNew: true,
-      discount: "7% OFF",
-      brand: "Samsung",
-      description: "Experience the power of Galaxy AI with S Pen, 200MP camera, and all-day battery life in this premium flagship.",
-      sizes: ["256GB", "512GB", "1TB"],
-      colors: ["Titanium Black", "Titanium Gray", "Titanium Violet", "Titanium Yellow"],
-      stockCount: 8
-    },
-    3: {
-      id: 3,
-      name: "OnePlus 12",
-      price: "₹64,999",
-      originalPrice: "₹69,999",
-      image: "https://images.pexels.com/photos/1092644/pexels-photo-1092644.jpeg?auto=compress&cs=tinysrgb&w=500",
-      category: "Smartphones",
-      rating: 4.6,
-      reviews: 634,
-      features: ["Snapdragon 8 Gen 3", "100W Charging", "Hasselblad Camera"],
-      inStock: true,
-      discount: "8% OFF",
-      brand: "OnePlus",
-      description: "Never Settle with Snapdragon 8 Gen 3, Hasselblad camera system, and 100W SuperVOOC charging technology.",
-      sizes: ["128GB", "256GB", "512GB"],
-      colors: ["Silky Black", "Flowy Emerald", "Sunset Dune"],
-      stockCount: 12
-    }
-  };
+  
+  // Get dynamic product data from Supabase
+  const { products } = useAdminData();
 
   // Enhanced error handling with retry mechanism
   const showErrorNotification = (message: string, isRetryable: boolean = false) => {
@@ -191,11 +126,34 @@ const QuickViewManager: React.FC<QuickViewManagerProps> = ({ isDarkMode = false 
       const timeout = Math.min(300 + (retryCount * 200), 1000);
       await new Promise(resolve => setTimeout(resolve, timeout));
 
-      const product = productDatabase[productId];
+      // Find product in dynamic data
+      const rawProduct = products.find(p => p.id === productId);
       
-      if (!product) {
+      if (!rawProduct) {
         throw new QuickViewError(`Product with ID ${productId} not found`, 'PRODUCT_NOT_FOUND');
       }
+
+      // Transform product data to match expected interface
+      const product: Product = {
+        id: rawProduct.id,
+        name: rawProduct.name,
+        price: rawProduct.price,
+        originalPrice: rawProduct.original_price || undefined,
+        image: rawProduct.image_url,
+        images: rawProduct.images ? JSON.parse(rawProduct.images) : [rawProduct.image_url],
+        category: rawProduct.category,
+        rating: rawProduct.rating || 4.5,
+        reviews_count: rawProduct.reviews_count || 0,
+        features: rawProduct.features ? JSON.parse(rawProduct.features) : [],
+        in_stock: rawProduct.in_stock,
+        isNew: rawProduct.is_new || false,
+        discount: rawProduct.discount || undefined,
+        brand: rawProduct.brand,
+        description: rawProduct.description || undefined,
+        sizes: rawProduct.sizes ? JSON.parse(rawProduct.sizes) : [],
+        colors: rawProduct.colors ? JSON.parse(rawProduct.colors) : [],
+        stock_count: rawProduct.stock_count || undefined
+      };
 
       // Validate product data using utility function
       validateProductData(product);

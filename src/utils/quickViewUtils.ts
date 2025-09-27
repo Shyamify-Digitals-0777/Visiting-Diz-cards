@@ -9,16 +9,16 @@ export interface QuickViewProduct {
   images?: string[];
   category: string;
   rating: number;
-  reviews: number;
+  reviews_count: number;
   features: string[];
-  inStock: boolean;
+  in_stock: boolean;
   isNew?: boolean;
   discount?: string;
   brand: string;
   description?: string;
   sizes?: string[];
   colors?: string[];
-  stockCount?: number;
+  stock_count?: number;
 }
 
 export interface QuickViewOptions {
