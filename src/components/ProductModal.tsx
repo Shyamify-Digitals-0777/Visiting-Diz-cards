@@ -303,8 +303,8 @@ const ProductModal: React.FC<ProductModalProps> = ({ isOpen, onClose, product, i
 
               {/* Pricing */}
               <div className="flex items-center gap-4">
-                <span className={`text-3xl font-bold ${isDarkMode ? 'text-blue-400' : 'text-blue-600'}`}>
-                  {product.price}
+                <span className={`text-xl line-through ${isDarkMode ? 'text-gray-500' : 'text-gray-400'} ml-3`}>
+                  {product.originalPrice}
                 </span>
                 {product.originalPrice && (
                   ({product.reviews_count} reviews)
